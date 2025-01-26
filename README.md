@@ -1,2 +1,2 @@
-# module_2_notebooks
+# module-2-notebooks
 Module 2 Notebooks and Exercises
