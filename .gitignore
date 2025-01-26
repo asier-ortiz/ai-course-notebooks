@@ -1,0 +1,56 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# macOS files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# PyCharm
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Virtual environment
+venv/
+env/
+
+# Jupyter Notebook output
+*.nbconvert.ipynb
+*.out
+*.log
+
+# Python virtual environment libraries
+*.egg
+*.egg-info/
+dist/
+build/
+*.pyc
+
+# Log files
+*.log
+
+# Unit test / coverage reports
+htmlcov/
+.coverage
+*.cover
+*.coverage.*
+
+# macOS specific
+*.DS_Store
+
+# Environment variables
+.env
+.env.*
+
+# Jupyter Notebook metadata
+.jupyter/
