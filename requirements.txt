@@ -1,7 +1,7 @@
 Flask
 Folium
-google-cloud-aiplatform
 geopy
+google-cloud-aiplatform
 imbalanced-learn
 ipykernel
 jupyter
@@ -18,4 +18,5 @@ scipy
 seaborn
 sqlalchemy
 statsmodels
-tensorflow
+tensorflow-macos
+tensorflow-metal
