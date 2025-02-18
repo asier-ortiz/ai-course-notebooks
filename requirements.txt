@@ -21,3 +21,4 @@ statsmodels
 tensorflow-macos
 tensorflow-metal
 kagglehub~=0.3.8
+requests~=2.32.3
