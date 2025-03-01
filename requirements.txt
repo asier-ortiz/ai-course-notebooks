@@ -1,6 +1,6 @@
 Flask
-Folium
-geopy
+Folium~=0.19.4
+geopy~=2.4.1
 google-cloud-aiplatform
 imbalanced-learn
 ipykernel
@@ -14,7 +14,7 @@ pip
 plotly
 pymongo
 scikit-learn~=1.6.1
-scipy
+scipy~=1.15.2
 seaborn~=0.13.2
 sqlalchemy
 statsmodels
