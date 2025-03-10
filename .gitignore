@@ -55,3 +55,6 @@ htmlcov/
 
 # Jupyter Notebook metadata
 .jupyter/
+
+# EuroSAT dataset
+data/EuroSAT/
