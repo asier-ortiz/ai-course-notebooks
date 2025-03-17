@@ -58,3 +58,6 @@ htmlcov/
 
 # EuroSAT dataset
 data/EuroSAT/
+
+# Pets dataset
+data/PetImages/
