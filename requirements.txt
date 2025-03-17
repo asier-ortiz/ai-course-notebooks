@@ -26,3 +26,4 @@ opencv-python
 scikit-image
 pydot
 graphviz
+keras-cv
