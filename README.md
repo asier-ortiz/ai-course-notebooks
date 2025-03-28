@@ -1,2 +1,2 @@
-# module-2-notebooks
-Module 2 Notebooks and Exercises
+# ai-course-notebooks
+AI Course Notebooks and Exercises
