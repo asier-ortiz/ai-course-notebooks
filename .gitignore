@@ -51,7 +51,7 @@ htmlcov/
 
 # Environment variables
 .env
-.env.*
+!.env.example
 
 # Jupyter Notebook metadata
 .jupyter/
