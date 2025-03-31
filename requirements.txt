@@ -27,3 +27,5 @@ scikit-image
 pydot
 graphviz
 keras-cv
+dotenv~=0.9.9
+python-dotenv~=1.1.0
