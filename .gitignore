@@ -61,3 +61,6 @@ data/EuroSAT/
 
 # Pets dataset
 data/PetImages/
+
+# Embeddings
+embeddings/

@@ -1,41 +1,71 @@
+# Librerías generales
+pip
 dotenv~=0.9.9
-Flask
-Folium~=0.19.4
-geopy~=2.4.1
-gensim~=4.3.2
-google-cloud-aiplatform
-graphviz
-imbalanced-learn
+python-dotenv~=1.1.0
+requests~=2.32.3
+
+# Visualización
+matplotlib~=3.10.0
+seaborn~=0.13.2
+missingno
+plotly
+
+# Jupyter & entorno interactivo
 ipykernel
 ipython~=8.32.0
 jupyter
-kagglehub~=0.3.8
-keras-cv
-lightgbm~=4.6.0
-matplotlib~=3.10.0
-missingno
-mysql-connector-python
-nltk~=3.9
+
+# Procesamiento de datos
 numpy~=1.26.4
-opencv-python~=4.11.0.86
 pandas~=2.2.3
-pip
-plotly
-protobuf~=4.25.6
-pydot
-pymongo
-python-dotenv~=1.1.0
-requests~=2.32.3
-scikit-image
 scikit-learn~=1.6.1
 scipy==1.11.4
-seaborn~=0.13.2
-spacy~=3.7.0
-sqlalchemy
 statsmodels
+imbalanced-learn
+
+# Procesamiento de texto / NLP
+nltk~=3.9
+spacy~=3.7.0
+gensim~=4.3.2
+Unidecode~=1.3.8
+
+# Deep learning
+tensorflow~=2.16.2
 tensorflow-macos
 tensorflow-metal
-tensorflow~=2.16.2
-tqdm~=4.67.1
-Unidecode~=1.3.8
+keras-cv
+torch~=2.6.0
+transformers==4.39.3
+accelerate==0.27.2  # <-- IMPORTANTE para usar Trainer correctamente
+tf-keras  # <-- Workaround para compatibilidad Keras 3 con Transformers
+
+# Hugging Face Datasets
+datasets~=3.5.0
+
+# Modelos adicionales
 xgboost~=2.1.4
+lightgbm~=4.6.0
+
+# Visualización de grafos y redes
+graphviz
+pydot
+
+# Geolocalización / Mapas
+Folium~=0.19.4
+geopy~=2.4.1
+
+# Conectores externos
+mysql-connector-python
+pymongo
+sqlalchemy
+
+# Kaggle
+kagglehub~=0.3.8
+
+# Proyectos específicos (como Google Cloud)
+google-cloud-aiplatform
+
+tqdm~=4.67.1
+simpletransformers~=0.70.1
+opencv-python~=4.11.0.86
+protobuf~=4.25.6
