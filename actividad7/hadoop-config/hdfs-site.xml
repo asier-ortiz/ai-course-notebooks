@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<configuration>
+  <property>
+    <name>dfs.replication</name>
+    <value>1</value>
+  </property>
+  <property>
+    <name>dfs.namenode.name.dir</name>
+    <value>file:///opt/hadoop-2.7.4/data/namenode</value>
+  </property>
+  <property>
+    <name>dfs.datanode.data.dir</name>
+    <value>file:///opt/hadoop-2.7.4/data/datanode</value>
+  </property>
+</configuration>

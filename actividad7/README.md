@@ -6,8 +6,8 @@ Este proyecto proporciona una configuración rápida y sencilla para trabajar co
 
 ## Contenido del proyecto
 
-- `Dockerfile` → Construye una imagen basada en `bde2020/hadoop-namenode`, lista para usar HDFS.
-- `Makefile` → Automatiza comandos comunes como build, run, stop, logs, etc.
+- `Dockerfile` → Construye una imagen basada en Ubuntu 20.04, instala Hadoop y configura HDFS.
+- `Makefile` → Automatiza comandos comunes como build, run, start, stop, logs, etc.
 - `.env.example` → Variables de entorno de ejemplo.
 
 ---
@@ -34,23 +34,24 @@ cd actividad7
 cp .env.example .env
 ```
 
-Edita el `.env` si quieres cambiar nombre del contenedor, imagen o ruta del volumen.
+Edita el `.env` si quieres cambiar nombre del contenedor, imagen, ruta del volumen o plataforma (`PLATFORM`) en función de tu sistema (`linux/amd64` o `linux/arm64`).
 
-### 3. Construir la imagen Docker
-
-```bash
-make build
-```
-
-### 4. Ejecutar el contenedor
+### 3. Construir y arrancar todo automáticamente
 
 ```bash
-make run
+make start
 ```
 
-Esto levantará el contenedor con puertos expuestos y volumen montado.
+Este comando:
 
-### 5. Acceder al contenedor
+- Construirá la imagen Docker
+- Lanzará el contenedor en segundo plano
+- Formateará automáticamente el NameNode (si no estaba formateado)
+- Arrancará los servicios de NameNode y DataNode
+
+¡Todo en un solo paso!
+
+### 4. Acceder al contenedor
 
 Entra en bash dentro del contenedor:
 
@@ -65,12 +66,12 @@ hdfs dfs -mkdir /books
 hdfs dfs -ls /
 ```
 
-### 6. Otros comandos útiles
+### 5. Otros comandos útiles
 
 - `make stop` → Detener el contenedor
 - `make restart` → Reiniciar el contenedor
 - `make logs` → Ver logs del contenedor
-- `make stats` → Ver estadísticas en vivo
+- `make stats` → Ver estadísticas en vivo del contenedor
 - `make clean` → Eliminar la imagen Docker
 - `make prune` → Limpiar redes Docker huérfanas
 
@@ -87,4 +88,7 @@ Puedes visitar en tu navegador: [http://localhost:50070](http://localhost:50070)
 
 ## Notas
 
-- Basado en la imagen comunitaria de [Big Data Europe](https://hub.docker.com/r/bde2020/hadoop-namenode).
+- Basado en instalación manual de Hadoop sobre Ubuntu 20.04.
+- Si estás usando un Mac con procesador M1, M2 o M3 (ARM64), asegúrate de configurar correctamente `PLATFORM=linux/amd64` en tu archivo `.env`. Docker se encargará automáticamente de la emulación.
+
+---
