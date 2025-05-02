@@ -1,6 +1,23 @@
 
 # Bash Commands Guide
 
+A practical reference of essential Bash commands for everyday use.
+
+---
+
+## Table of Contents
+1. [Basic Commands](#basic-commands)
+2. [File Permissions](#file-permissions)
+3. [Process Management](#process-management)
+4. [Networking](#networking)
+5. [Disk Usage](#disk-usage)
+6. [Text Processing](#text-processing)
+7. [Scripting](#scripting)
+8. [Package Management (Debian/Ubuntu)](#package-management-debianubuntu)
+9. [Tips](#tips)
+
+---
+
 ## Basic Commands
 
 | Command | Description |
@@ -19,13 +36,19 @@
 | `head <file>` | Show the first 10 lines of a file |
 | `tail <file>` | Show the last 10 lines of a file |
 
+---
+
 ## File Permissions
+
+---
 
 | Command | Description |
 |--------|-------------|
 | `chmod <mode> <file>` | Change permissions |
 | `chown <user>:<group> <file>` | Change owner and group |
 | `ls -l` | List files with permissions |
+
+---
 
 ## Process Management
 
@@ -37,6 +60,8 @@
 | `kill <pid>` | Kill process by PID |
 | `killall <process_name>` | Kill all processes by name |
 
+---
+
 ## Networking
 
 | Command | Description |
@@ -47,12 +72,16 @@
 | `ssh <user>@<host>` | Connect to remote host via SSH |
 | `scp <source> <user>@<host>:<dest>` | Secure copy between hosts |
 
+---
+
 ## Disk Usage
 
 | Command | Description |
 |--------|-------------|
 | `df -h` | Show disk space usage |
 | `du -sh <dir>` | Show size of a directory |
+
+---
 
 ## Text Processing
 
@@ -65,12 +94,16 @@
 | `uniq <file>` | Filter unique lines |
 | `cut -d',' -f1 <file>` | Cut by delimiter (e.g., comma) |
 
+---
+
 ## Scripting
 
 | Command | Description |
 |--------|-------------|
 | `bash <script.sh>` | Run a bash script |
 | `source <script.sh>` | Execute commands from script in the current shell |
+
+---
 
 ## Package Management (Debian/Ubuntu)
 
@@ -81,7 +114,9 @@
 | `sudo apt install <package>` | Install a package |
 | `sudo apt remove <package>` | Remove a package |
 
-## Advanced Tips
+---
+
+## Tips
 
 - **Command chaining**: `cmd1 && cmd2` (run cmd2 only if cmd1 succeeds)
 - **Background jobs**: `cmd &`
