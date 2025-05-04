@@ -1,0 +1,20 @@
+services:
+
+  hdfs-actividad7:
+    platform: linux/amd64 # Necesario en Macs con chip M1/M2/M3 para evitar problemas de compatibilidad
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - PLATFORM=${PLATFORM}
+    container_name: ${CONTAINER_NAME}
+    ports:
+      - "50070:50070"
+      - "9000:9000"
+    volumes:
+      - ./home/ubuntu/bigdata/examples:${INPUT_DIR}
+    environment:
+      - HDFS_USER_NAME=${HDFS_USER_NAME}
+      - INPUT_DIR=${INPUT_DIR}
+    env_file:
+      - .env

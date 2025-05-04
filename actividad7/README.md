@@ -1,6 +1,6 @@
 # Actividad 7 - HDFS
 
-Este proyecto proporciona una configuración rápida y automatizada para trabajar con **HDFS** usando **Docker**, cargando automáticamente contenido al sistema distribuido al iniciar el contenedor.
+Este proyecto proporciona una configuración mínima y automatizada para trabajar con **HDFS** usando **Docker**, cargando automáticamente contenido al sistema distribuido al iniciar el contenedor.
 
 ---
 
@@ -9,6 +9,7 @@ Este proyecto proporciona una configuración rápida y automatizada para trabaja
 ```
 actividad7/
 ├── Dockerfile
+├── docker-compose.yml
 ├── Makefile
 ├── .env.example
 ├── entrypoint.sh
@@ -29,6 +30,7 @@ actividad7/
 ```
 
 - `Dockerfile` → Imagen personalizada basada en Ubuntu 20.04 con Hadoop 2.7.4 y configuración manual de HDFS.
+- `docker-compose.yml` → Facilita el arranque del contenedor usando volumenes y variables de entorno.
 - `Makefile` → Automatiza tareas como build, run, stop, logs, stats, etc.
 - `.env.example` → Archivo de ejemplo con variables de entorno configurables.
 - `entrypoint.sh` → Script de arranque que inicia los servicios y lanza `actividad7.sh`.
@@ -122,3 +124,4 @@ Abre [http://localhost:50070](http://localhost:50070) en tu navegador para acced
 
 - Basado en una instalación manual de Hadoop 2.7.4 sobre Ubuntu 20.04.
 - Si estás usando un Mac con chip M1, M2 o M3 (ARM64), asegúrate de definir `PLATFORM=linux/amd64` en tu archivo `.env`. Docker usará emulación automáticamente.
+- `platform: linux/amd64` está definido también en `docker-compose.yml`; coméntalo si no lo necesitas.

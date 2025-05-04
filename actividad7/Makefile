@@ -1,81 +1,58 @@
 include .env
 
-.PHONY: help build run bash stop restart logs stats clean prune start reset actividad-log
+.PHONY: help build up down restart bash logs stats clean prune start reset actividad-log
 
-# Ruta absoluta del directorio actual del Makefile
 BASE_DIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
-
-# Variables de entorno desde .env
-CONTAINER_NAME ?= hdfs-actividad7
-IMAGE_NAME ?= hdfs-actividad7
-PLATFORM ?= linux/amd64
-INPUT_DIR ?= /home/ubuntu/bigdata/examples
-VOLUME_DIR ?= $(BASE_DIR)/home/ubuntu/bigdata/examples
-HDFS_USER_NAME ?= default_user
+COMPOSE := docker compose
 
 help:
 	@echo "Opciones disponibles:"
 	@echo "-----------------------------"
-	@echo " build           - Construir la imagen Docker"
-	@echo " run             - Ejecutar el contenedor en segundo plano"
-	@echo " start           - Construir y lanzar Hadoop funcionando automáticamente"
+	@echo " build           - Construir la imagen"
+	@echo " up              - Levantar el servicio"
+	@echo " start           - Construir y lanzar todo automáticamente"
 	@echo " bash            - Entrar en bash dentro del contenedor"
-	@echo " stop            - Detener el contenedor"
-	@echo " restart         - Reiniciar contenedor"
 	@echo " logs            - Ver los logs del contenedor"
 	@echo " stats           - Ver estadísticas en vivo del contenedor"
-	@echo " clean           - Eliminar la imagen y contenedores"
+	@echo " down            - Detener y eliminar el contenedor"
+	@echo " clean           - Eliminar imagen y contenedor"
 	@echo " prune           - Limpiar redes Docker huérfanas"
-	@echo " reset           - Eliminar contenedor, imagen y archivos de entrada"
-	@echo " actividad-log   - Mostrar el log de actividad7.sh desde dentro del contenedor"
+	@echo " reset           - Eliminar todo y limpiar carpeta de ejemplos"
+	@echo " actividad-log   - Mostrar el log de actividad7.sh desde el contenedor"
 	@echo "-----------------------------"
 
 build:
-	docker build --platform $(PLATFORM) -t $(IMAGE_NAME) $(BASE_DIR)
+	$(COMPOSE) build
 
-run:
-	@test -d $(VOLUME_DIR) || (echo "La ruta $(VOLUME_DIR) no existe. Revisa la estructura del proyecto." && exit 1)
-	@docker rm -f $(CONTAINER_NAME) 2>/dev/null || true
-	docker run --platform $(PLATFORM) -d \
-		-p 50070:50070 \
-		-p 9000:9000 \
-		-v $(VOLUME_DIR):$(INPUT_DIR) \
-		-e HDFS_USER_NAME=$(HDFS_USER_NAME) \
-		-e INPUT_DIR=$(INPUT_DIR) \
-		--name $(CONTAINER_NAME) \
-		$(IMAGE_NAME)
+up:
+	$(COMPOSE) up -d
+
+start: build up
+	@echo "Contenedor arrancado. Puedes consultar Hadoop en:"
+	@echo "- NameNode UI: http://localhost:50070"
 
 bash:
 	docker exec -it $(CONTAINER_NAME) bash
 
-stop:
-	docker stop $(CONTAINER_NAME)
-
-restart: stop run
-
 logs:
-	docker logs -f $(CONTAINER_NAME)
+	$(COMPOSE) logs -f
 
 stats:
 	docker stats $(CONTAINER_NAME)
 
-clean:
-	- docker ps -a -q --filter "ancestor=$(IMAGE_NAME)" | xargs -r docker rm -f
-	docker rmi -f $(IMAGE_NAME)
+down:
+	$(COMPOSE) down
+
+clean: down
+	@docker rmi -f $(IMAGE_NAME) || true
 
 prune:
 	docker network prune -f
 
-start: build run
-	@echo "Contenedor arrancado. Puedes consultar Hadoop en http://localhost:50070"
-
-reset:
-	@echo "Eliminando contenedor, imagen y archivos de entrada..."
-	- docker rm -f $(CONTAINER_NAME) 2>/dev/null || true
-	- docker rmi -f $(IMAGE_NAME) 2>/dev/null || true
-	- rm -rf $(VOLUME_DIR)/*
-	@echo "Entorno limpio. Ejecuta 'make start' para reconstruir y reiniciar."
+reset: clean
+	@echo "Limpiando archivos del volumen..."
+	@rm -rf $(BASE_DIR)/home/ubuntu/bigdata/examples/*
+	@echo "Entorno limpio. Ejecuta 'make start' para reconstruir todo."
 
 actividad-log:
-	@echo "Mostrando el log de actividad7.sh..."
 	docker exec -it $(CONTAINER_NAME) bash -c "cat /var/log/actividad7.log || echo 'Log no encontrado o aún no generado.'"

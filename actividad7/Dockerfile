@@ -1,6 +1,5 @@
 FROM ubuntu:20.04
 
-# Evitar preguntas en la instalación
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Instalación de Java, SSH, y utilidades necesarias
@@ -16,8 +15,12 @@ RUN apt-get update && apt-get install -y \
     iputils-ping \
     && apt-get clean
 
-# Variables de entorno
-ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+# Detectar y fijar la ruta correcta de JAVA_HOME si existe
+RUN ln -s /usr/lib/jvm/java-8-openjdk-amd64 /usr/lib/jvm/default-java || true
+
+ENV JAVA_HOME=/usr/lib/jvm/default-java
+ENV PATH=$JAVA_HOME/bin:$PATH
+
 ENV HADOOP_VERSION=2.7.4
 ENV HADOOP_HOME=/opt/hadoop-2.7.4
 
@@ -46,10 +49,8 @@ RUN chmod +x /entrypoint.sh /setup/actividad7.sh
 # Añadir variables al bashrc para acceso interactivo
 RUN echo 'export HADOOP_HOME=/opt/hadoop-2.7.4' >> /root/.bashrc && \
     echo 'export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop' >> /root/.bashrc && \
-    echo 'export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin' >> /root/.bashrc
+    echo 'export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$JAVA_HOME/bin' >> /root/.bashrc
 
-# Puerto para acceder al NameNode WebUI
 EXPOSE 50070
 
-# Comando por defecto
 CMD ["/entrypoint.sh"]
