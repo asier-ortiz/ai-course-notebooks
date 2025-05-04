@@ -1,20 +1,90 @@
 services:
 
-  hdfs-actividad7:
-    platform: linux/amd64 # Necesario en Macs con chip M1/M2/M3 para evitar problemas de compatibilidad
+  namenode:
+    platform: ${PLATFORM}
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        - PLATFORM=${PLATFORM}
-    container_name: ${CONTAINER_NAME}
+    container_name: namenode
+    command: start-namenode
     ports:
       - "50070:50070"
       - "9000:9000"
     volumes:
-      - ./home/ubuntu/bigdata/examples:${INPUT_DIR}
-    environment:
-      - HDFS_USER_NAME=${HDFS_USER_NAME}
-      - INPUT_DIR=${INPUT_DIR}
+      - ./home/ubuntu/bigdata/examples:/data
     env_file:
       - .env
+
+  datanode:
+    platform: ${PLATFORM}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: datanode
+    command: start-datanode
+    depends_on:
+      - namenode
+    volumes:
+      - ./home/ubuntu/bigdata/examples:/data
+    env_file:
+      - .env
+
+  resourcemanager:
+    platform: ${PLATFORM}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: resourcemanager
+    command: start-resourcemanager
+    ports:
+      - "8088:8088"
+    depends_on:
+      - namenode
+    env_file:
+      - .env
+
+  nodemanager:
+    platform: ${PLATFORM}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nodemanager
+    command: start-nodemanager
+    depends_on:
+      - resourcemanager
+    env_file:
+      - .env
+
+  historyserver:
+    platform: ${PLATFORM}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: historyserver
+    command: start-historyserver
+    ports:
+      - "19888:19888"
+    volumes:
+      - hadoop_historyserver:/hadoop/yarn/timeline
+    depends_on:
+      - resourcemanager
+    env_file:
+      - .env
+
+  actividad7:
+    platform: ${PLATFORM}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: actividad7
+    command: /setup/actividad7.sh
+    depends_on:
+      - namenode
+      - datanode
+    volumes:
+      - ./home/ubuntu/bigdata/examples:/home/ubuntu/bigdata/examples
+    env_file:
+      - .env
+
+volumes:
+  hadoop_historyserver:

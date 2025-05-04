@@ -17,7 +17,9 @@ actividad7/
 │   └── actividad7.sh
 ├── hadoop-config/
 │   ├── core-site.xml
-│   └── hdfs-site.xml
+│   ├── hdfs-site.xml
+│   ├── mapred-site.xml
+│   └── yarn-site.xml
 └── home/
     └── ubuntu/
         └── bigdata/
@@ -29,13 +31,13 @@ actividad7/
                     └── fichero_result.zip
 ```
 
-- `Dockerfile` → Imagen personalizada basada en Ubuntu 20.04 con Hadoop 2.7.4 y configuración manual de HDFS.
-- `docker-compose.yml` → Facilita el arranque del contenedor usando volumenes y variables de entorno.
-- `Makefile` → Automatiza tareas como build, run, stop, logs, stats, etc.
+- `Dockerfile` → Imagen personalizada basada en Ubuntu 20.04 con Hadoop 2.7.4 y configuración manual de HDFS y YARN.
+- `docker-compose.yml` → Define los servicios necesarios: NameNode, DataNode, ResourceManager, NodeManager, HistoryServer, etc.
+- `Makefile` → Automatiza tareas como build, run, stop, logs, stats, carga de datos, etc.
 - `.env.example` → Archivo de ejemplo con variables de entorno configurables.
-- `entrypoint.sh` → Script de arranque que inicia los servicios y lanza `actividad7.sh`.
+- `entrypoint.sh` → Script de arranque principal que lanza cada servicio según el comando recibido.
 - `setup/actividad7.sh` → Script que realiza todas las tareas del ejercicio: crear directorios, cargar ficheros, descomprimir y mover archivos en HDFS.
-- `hadoop-config/` → Archivos XML con configuración de HDFS.
+- `hadoop-config/` → Archivos XML con la configuración completa de Hadoop (core, HDFS, MapReduce, YARN).
 - `home/ubuntu/bigdata/examples/` → Estructura de carpetas que simula un entorno Linux típico dentro del contenedor. Aquí deben colocarse los archivos de entrada para HDFS:
   - `/books` → Ficheros de texto de ejemplo.
   - `/hdfs` → Archivo comprimido `fichero_result.zip`.
@@ -81,10 +83,9 @@ make start
 
 Este comando:
 
-- Construye la imagen Docker (si no existe)
-- Lanza el contenedor en segundo plano
-- Formatea el NameNode (la primera vez)
-- Arranca los servicios de NameNode y DataNode
+- Construye las imágenes Docker
+- Lanza todos los servicios en segundo plano
+- Formatea el NameNode si es necesario
 - Ejecuta automáticamente el script `actividad7.sh`, que:
   - Crea directorios en HDFS (`/books`, `/user/...`)
   - Carga los libros en `/books`
@@ -103,25 +104,27 @@ make actividad-log
 
 ## Comandos útiles
 
-- `make bash` → Accede al contenedor con bash
-- `make stop` → Detiene el contenedor
-- `make restart` → Reinicia el contenedor
-- `make logs` → Muestra los logs
-- `make stats` → Monitoriza recursos del contenedor
-- `make clean` → Elimina la imagen Docker
+- `make bash` → Accede al contenedor del NameNode
+- `make logs` → Muestra los logs de todos los servicios
+- `make stats` → Monitoriza el uso de recursos
+- `make down` → Detiene y elimina todos los contenedores
+- `make clean` → Elimina contenedores, imágenes, volúmenes y redes huérfanas
 - `make prune` → Limpia redes huérfanas de Docker
-- `make reset` → Borra contenedor, imagen y archivos generados
+- `make reset` → Elimina todo y borra también los archivos de ejemplo
+- `make actividad-run` → Ejecuta `actividad7.sh` de forma aislada en un contenedor temporal
+- `make actividad-log` → Muestra el log generado por `actividad7.sh`
 
 ---
 
-## Acceso a la interfaz web de HDFS
+## Acceso a la interfaz web
 
-Abre [http://localhost:50070](http://localhost:50070) en tu navegador para acceder a la interfaz del NameNode.
+- NameNode UI: [http://localhost:9870](http://localhost:9870)
+- ResourceManager UI: [http://localhost:8088](http://localhost:8088)
+- HistoryServer UI: [http://localhost:19888](http://localhost:19888)
 
 ---
 
 ## Notas
 
 - Basado en una instalación manual de Hadoop 2.7.4 sobre Ubuntu 20.04.
-- Si estás usando un Mac con chip M1, M2 o M3 (ARM64), asegúrate de definir `PLATFORM=linux/amd64` en tu archivo `.env`. Docker usará emulación automáticamente.
-- `platform: linux/amd64` está definido también en `docker-compose.yml`; coméntalo si no lo necesitas.
+- Si usas Mac con chip M1/M2/M3 (ARM64), define `PLATFORM=linux/amd64` en `.env`. Docker usará emulación automáticamente.

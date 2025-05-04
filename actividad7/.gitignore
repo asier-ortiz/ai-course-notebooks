@@ -1,0 +1,22 @@
+# Archivos de entorno
+.env
+
+# Archivos generados por Docker
+*.log
+*.pid
+*.seed
+*.swp
+*.swo
+*.swn
+*.bak
+
+# Volúmenes locales y otros datos temporales
+home/ubuntu/bigdata/examples/hdfs/frankenstein.txt
+home/ubuntu/bigdata/examples/hdfs/fichero_result.txt
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de backup de editores
+*~
