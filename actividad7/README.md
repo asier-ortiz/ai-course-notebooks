@@ -2,6 +2,8 @@
 
 Este proyecto proporciona una configuración mínima y automatizada para trabajar con **HDFS** usando **Docker**, cargando automáticamente contenido al sistema distribuido al iniciar los contenedores.
 
+<img src="docs/hadoop_cluster_architecture.svg" alt="Arquitectura del clúster Hadoop" width="700"/>
+
 ---
 
 ## Estructura y contenido del proyecto
