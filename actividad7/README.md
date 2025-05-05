@@ -1,6 +1,6 @@
 # Actividad 7 - HDFS
 
-Este proyecto proporciona una configuración mínima y automatizada para trabajar con **HDFS** usando **Docker**, cargando automáticamente contenido al sistema distribuido al iniciar el contenedor.
+Este proyecto proporciona una configuración mínima y automatizada para trabajar con **HDFS** usando **Docker**, cargando automáticamente contenido al sistema distribuido al iniciar los contenedores.
 
 ---
 
