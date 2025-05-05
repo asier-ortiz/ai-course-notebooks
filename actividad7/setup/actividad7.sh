@@ -41,7 +41,7 @@ for FILE in frankenstein.txt Quijote.txt; do
     if cp "$INPUT_DIR/books/$FILE" /tmp; then
       hdfs dfs -put /tmp/$FILE /books/
     else
-      echo "⚠️ No se pudo copiar $FILE desde $INPUT_DIR/books/"
+      echo "No se pudo copiar $FILE desde $INPUT_DIR/books/"
     fi
   else
     echo "$FILE ya está en /books"
