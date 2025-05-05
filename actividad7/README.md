@@ -86,7 +86,7 @@ Este comando:
 - Construye las imágenes Docker
 - Lanza todos los servicios en segundo plano
 - Formatea el NameNode si es necesario
-- Ejecuta automáticamente el script `actividad7.sh`, que:
+- Ejecuta automáticamente el script `setup/actividad7.sh`, que:
   - Crea directorios en HDFS (`/books`, `/user/...`)
   - Carga los libros en `/books`
   - Descomprime y sube el archivo `fichero_result.txt`
