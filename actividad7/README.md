@@ -114,6 +114,8 @@ make actividad-log
 - `make actividad-run` → Ejecuta `actividad7.sh` de forma aislada en un contenedor temporal
 - `make actividad-log` → Muestra el log generado por `actividad7.sh`
 
+**For more details, you can check the [Makefile](./Makefile), where all these commands are defined.**
+
 ---
 
 ## Acceso a la interfaz web
