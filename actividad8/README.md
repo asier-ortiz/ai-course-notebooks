@@ -50,17 +50,17 @@ TOPIC=pec-topic1-asier
 ### Enviar mensajes con el productor:
 
 ```bash
-python producer.py
+python3 producer.py
 ```
 
 ### Leer mensajes con un único consumidor:
 
 ```bash
-python consumer.py
+python3 consumer.py
 ```
 
 ### Simular un grupo de consumidores (2 procesos):
 
 ```bash
-python group_consumer.py
+python3 group_consumer.py
 ```
