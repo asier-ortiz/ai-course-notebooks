@@ -1,84 +1,66 @@
-# Actividad 8 - Kafka + Zookeeper
+# Actividad 8 – Apache Kafka con Confluent Cloud
 
-Este proyecto proporciona una configuración rápida y sencilla para trabajar con **Apache Kafka** y **Zookeeper** usando **Docker Compose**.
+Este proyecto desarrolla un flujo completo de trabajo con Apache Kafka, incluyendo la creación de un topic, un productor de eventos, consumidores individuales y un grupo de consumidores.
 
----
-
-## Contenido del proyecto
-
-- `docker-compose.yml` → Orquesta contenedores de Zookeeper y Kafka.
-- `Makefile` → Automatiza comandos comunes como build, up, down, logs, etc.
-- `.env.example` → Variables de entorno de ejemplo para personalizar puertos, versiones e imagenes.
+La implementación se ha realizado en **Python** utilizando la librería `confluent-kafka`, con conexión directa a un clúster gestionado en **Confluent Cloud**.
 
 ---
 
-## Requisitos previos
+## Estructura del proyecto
 
-- [Docker](https://docs.docker.com/get-docker/) instalado
-- [Docker Compose](https://docs.docker.com/compose/) instalado
-- [Make](https://www.gnu.org/software/make/) instalado
+- `.env.example`: plantilla para generar en fichero `.env`.
+- `producer.py`: envía mensajes aleatorios al topic creado.
+- `consumer.py`: lee los mensajes desde el topic.
+- `group_consumer.py`: lanza múltiples instancias de `consumer.py` para simular un grupo de consumidores.
+- `utils.py`: carga las variables del `.env`.
 
 ---
 
-## Instrucciones de uso
+## Requisitos
 
-### 1. Clonar el repositorio
+Instala las dependencias necesarias:
 
 ```bash
-git clone git@github.com:asier-ortiz/ai-course-notebooks.git
-cd actividad8
+pip install confluent-kafka python-dotenv
 ```
 
-### 2. Crear el archivo `.env`
+---
+
+## Configuración
+
+Copia el archivo `.env.example` como base:
 
 ```bash
 cp .env.example .env
 ```
 
-Edita el `.env` si quieres cambiar versiones de Kafka, Zookeeper, puertos o nombres de contenedores.
+Luego, edita `.env` y completa las siguientes variables de entorno con los datos proporcionados por Confluent Cloud:
 
-### 3. Levantar los servicios
-
-```bash
-make up
+```env
+BOOTSTRAP_SERVERS=pkc-xxxxx.us-east-1.aws.confluent.cloud:9092
+API_KEY=your_api_key_here
+API_SECRET=your_api_secret_here
+TOPIC=pec-topic1-asier
 ```
-
-Esto lanzará tanto **Zookeeper** como **Kafka** automáticamente en segundo plano.
-
-### 4. Acceder a los contenedores
-
-Para entrar en el contenedor de Kafka:
-
-```bash
-make bash-kafka
-```
-
-Para entrar en el contenedor de Zookeeper:
-
-```bash
-make bash-zookeeper
-```
-
-### 5. Otros comandos útiles
-
-- `make down` → Parar y eliminar los contenedores
-- `make restart` → Reiniciar los servicios
-- `make logs` → Ver logs de los contenedores
-- `make clean` → Borrar todos los contenedores e imágenes relacionados
-- `make prune` → Limpiar redes Docker huérfanas
 
 ---
 
-## Puertos expuestos
+## Ejecución
 
-- **2181** → Zookeeper client port
-- **9092** → Kafka broker port
+### Enviar mensajes con el productor:
 
-Puedes conectar clientes Kafka apuntando a `localhost:9092`.
+```bash
+python producer.py
+```
 
----
+### Leer mensajes con un único consumidor:
 
-## Notas
+```bash
+python consumer.py
+```
 
-- Se utiliza `confluentinc/cp-zookeeper` y `confluentinc/cp-kafka`, imágenes oficiales de Confluent Platform.
-- Proyecto preparado para funcionar en arquitecturas `linux/amd64` y `linux/arm64`.
+### Simular un grupo de consumidores (2 procesos):
+
+```bash
+python group_consumer.py
+```
