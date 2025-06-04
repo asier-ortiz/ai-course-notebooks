@@ -15,7 +15,6 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.7;
             color: #333;
-            /*background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);*/
             background: linear-gradient(135deg, #AED6F1 0%, #F8E6A0 100%);
             min-height: 100vh;
             padding: 2rem;
@@ -55,6 +54,7 @@
             padding-bottom: 0.5rem;
             border-bottom: 3px solid #3498db;
             position: relative;
+            scroll-margin-top: 2rem;
         }
 
         h2::after {
@@ -72,6 +72,7 @@
             font-size: 1.3rem;
             margin: 2rem 0 1rem 0;
             font-weight: 600;
+            scroll-margin-top: 2rem;
         }
 
         p {
@@ -213,6 +214,79 @@
                 transform: translateY(0);
             }
         }
+
+        .table-of-contents {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 3rem;
+            border-left: 5px solid #3498db;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .table-of-contents h2 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 0.5rem;
+        }
+
+        .toc-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .toc-list > li {
+            margin-bottom: 1rem;
+            padding-left: 0;
+        }
+
+        .toc-list > li > a {
+            color: #2c3e50;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: block;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(52, 152, 219, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .toc-list > li > a:hover {
+            color: #3498db;
+            padding-left: 1rem;
+            border-bottom-color: #3498db;
+        }
+
+        .toc-list ul {
+            list-style: none;
+            margin: 0.5rem 0 0 1.5rem;
+            padding: 0;
+        }
+
+        .toc-list ul li {
+            margin-bottom: 0.5rem;
+            padding-left: 0;
+        }
+
+        .toc-list ul li a {
+            color: #555;
+            text-decoration: none;
+            font-size: 0.95rem;
+            display: block;
+            padding: 0.3rem 0;
+            transition: all 0.3s ease;
+            border-left: 2px solid transparent;
+            padding-left: 0.5rem;
+        }
+
+        .toc-list ul li a:hover {
+            color: #3498db;
+            border-left-color: #3498db;
+            padding-left: 1rem;
+        }
     </style>
 </head>
 <body>
@@ -222,10 +296,43 @@
     </div>
 
     <div class="content">
-        <section class="section">
+
+        <div class="table-of-contents">
+            <h2>Índice</h2>
+            <ul class="toc-list">
+                <li><a href="#seccion-1">1. Comprensión del Negocio (CRISP-DM - Fase 1)</a>
+                    <ul>
+                        <li><a href="#seccion-1-1">1.1. Contexto y motivación</a></li>
+                        <li><a href="#seccion-1-2">1.2. Objetivo general del sistema de IA</a></li>
+                        <li><a href="#seccion-1-3">1.3. Justificación del uso de IA y tecnología concreta</a></li>
+                        <li><a href="#seccion-1-4">1.4. Criterios de éxito</a></li>
+                        <li><a href="#seccion-1-5">1.5. Objetivos de minería de datos</a></li>
+                        <li><a href="#seccion-1-6">1.6. Evaluación de la situación</a></li>
+                    </ul>
+                </li>
+                <li><a href="#seccion-2">2. Comprensión de los Datos (CRISP-DM - Fase 2)</a>
+                    <ul>
+                        <li><a href="#seccion-2-1">2.1. Recopilación inicial de datos</a></li>
+                        <li><a href="#seccion-2-2">2.2. Descripción de los datos</a></li>
+                        <li><a href="#seccion-2-3">2.3. Exploración de los datos</a></li>
+                        <li><a href="#seccion-2-4">2.4. Verificación de calidad de datos</a></li>
+                    </ul>
+                </li>
+                <li><a href="#seccion-3">3. Evaluación legal y ética</a>
+                    <ul>
+                        <li><a href="#seccion-3-1">3.1. Clasificación de riesgo según Reglamento UE 2024/1689</a></li>
+                        <li><a href="#seccion-3-2">3.2. Protección de datos y principios éticos</a></li>
+                    </ul>
+                </li>
+                <li><a href="#seccion-4">4. Planificación del proyecto</a></li>
+                <li><a href="#seccion-5">5. Conclusión</a></li>
+            </ul>
+        </div>
+
+        <section class="section" id="seccion-1">
             <h2>1. Comprensión del Negocio (CRISP-DM - Fase 1)</h2>
 
-            <h3>1.1. Contexto y motivación</h3>
+            <h3 id="seccion-1-1">1.1. Contexto y motivación</h3>
             <p>El mercado de alquiler en Madrid presenta un problema evidente: encontrar vivienda asequible se ha
                 convertido en una tarea extremadamente compleja. Definimos "alquiler asequible" como propiedades por
                 debajo de 750€ mensuales, umbral que delimita el acceso real a vivienda para gran parte de la población.
@@ -233,7 +340,7 @@
                 tanto a inquilinos como a propietarios y administraciones públicas que buscan herramientas más
                 eficientes para gestionar esta problemática.</p>
 
-            <h3>1.2. Objetivo general del sistema de IA</h3>
+            <h3 id="seccion-1-2">1.2. Objetivo general del sistema de IA</h3>
             <p>El objetivo es desarrollar un sistema de Inteligencia Artificial capaz de predecir el precio justo de
                 alquiler de una propiedad basándose en sus características específicas: superficie, ubicación, estado,
                 tipo de vivienda, equipamiento, etc. El enfoque se centra exclusivamente en el rango de vivienda
@@ -282,7 +389,7 @@
                 establecer precios justos, y administraciones públicas que necesitan identificar zonas con problemáticas
                 de acceso a vivienda.</p>
 
-            <h3>1.3. Justificación del uso de IA y tecnología concreta</h3>
+            <h3 id="seccion-1-3">1.3. Justificación del uso de IA y tecnología concreta</h3>
             <p><strong>¿Por qué los enfoques tradicionales no son suficientes?</strong></p>
             <p>El mercado inmobiliario presenta características que hacen inviables los métodos convencionales:</p>
 
@@ -363,7 +470,7 @@
                 </li>
             </ul>
 
-            <h3>1.4. Criterios de éxito</h3>
+            <h3 id="seccion-1-4">1.4. Criterios de éxito</h3>
             <p><strong>Métricas de rendimiento técnico:</strong></p>
             <ul>
                 <li><strong>Precisión predictiva:</strong> Error medio absoluto (MAE) ≤ 50€ en predicciones
@@ -415,7 +522,7 @@
                 </li>
             </ul>
 
-            <h3>1.5. Objetivos de minería de datos</h3>
+            <h3 id="seccion-1-5">1.5. Objetivos de minería de datos</h3>
             <p><strong>Traducción de objetivos de negocio a problemas técnicos de machine learning:</strong></p>
 
             <div class="table-container">
@@ -462,7 +569,7 @@
                 </table>
             </div>
 
-            <h3>1.6. Evaluación de la situación</h3>
+            <h3 id="seccion-1-6">1.6. Evaluación de la situación</h3>
             <p><strong>Conocimiento previo disponible:</strong></p>
             <p>Existe investigación consolidada sobre factores determinantes del precio de alquiler en Madrid:
                 ubicación, superficie, proximidad a transporte público, oferta de servicios locales. Sin embargo, la
@@ -499,17 +606,17 @@
             </ul>
         </section>
 
-        <section class="section">
+        <section class="section" id="seccion-2">
             <h2>2. Comprensión de los Datos (CRISP-DM - Fase 2)</h2>
 
-            <h3>2.1. Recopilación inicial de datos</h3>
+            <h3 id="seccion-2-1">2.1. Recopilación inicial de datos</h3>
             <p>El proyecto utiliza un dataset especializado disponible en Kaggle que recopila anuncios de alquiler en la
                 provincia de Madrid. Los datos provienen de scraping sistemático de portales inmobiliarios principales,
                 proporcionando una muestra representativa del mercado de alquiler actual. Para este proyecto, se
                 aplicará un filtro para seleccionar únicamente propiedades por debajo de 750€ mensuales, eliminando el
                 ruido del mercado premium y centrándose en el segmento asequible de interés.</p>
 
-            <h3>2.2. Descripción de los datos</h3>
+            <h3 id="seccion-2-2">2.2. Descripción de los datos</h3>
             <p>El dataset presenta una estructura diversificada que permite aplicar múltiples técnicas de machine
                 learning:</p>
             <ul>
@@ -533,7 +640,7 @@
                 </li>
             </ul>
 
-            <h3>2.3. Exploración de los datos</h3>
+            <h3 id="seccion-2-3">2.3. Exploración de los datos</h3>
             <p><strong>Características del volumen y distribución:</strong></p>
             <ul>
                 <li><strong>Volumen:</strong> Miles de registros suficientes para entrenamiento robusto de modelos.</li>
@@ -558,7 +665,7 @@
                 <li><strong>Equipamiento:</strong> amplia variabilidad en características y servicios incluidos.</li>
             </ul>
 
-            <h3>2.4. Verificación de calidad de datos</h3>
+            <h3 id="seccion-2-4">2.4. Verificación de calidad de datos</h3>
             <p><strong>Fortalezas identificadas en el dataset:</strong></p>
             <ul>
                 <li><strong>Multimodalidad:</strong> Combinación de datos estructurados, texto libre y información
@@ -610,10 +717,10 @@
             </ul>
         </section>
 
-        <section class="section">
+        <section class="section" id="seccion-3">
             <h2>3. Evaluación legal y ética</h2>
 
-            <h3>3.1. Clasificación de riesgo según Reglamento UE 2024/1689</h3>
+            <h3 id="seccion-3-1">3.1. Clasificación de riesgo según Reglamento UE 2024/1689</h3>
             <p><strong>Análisis sistemático de exclusión de "riesgo inaceptable":</strong></p>
             <p>El artículo 5 del <a href="https://www.boe.es/doue/2024/1689/L00001-00144.pdf" target="_blank">Reglamento
                 UE 2024/1689</a> prohíbe específicamente sistemas de IA de riesgo inaceptable. Se verifica punto por
@@ -668,7 +775,7 @@
             <p><strong>Clasificación resultante:</strong> El sistema se clasifica como <strong>riesgo mínimo</strong>.
             </p>
 
-            <h3>3.2. Protección de datos y principios éticos</h3>
+            <h3 id="seccion-3-2">3.2. Protección de datos y principios éticos</h3>
             <p><strong>Cumplimiento RGPD:</strong> Aunque el dataset no contiene datos personales directos, se
                 implementan medidas preventivas: eliminación de identificadores potencialmente reidentificables (URLs,
                 IDs únicos), anonimización completa de predicciones, limitación de uso a fines académicos e
@@ -681,7 +788,7 @@
                 la especulación inmobiliaria.</p>
         </section>
 
-        <section class="section">
+        <section class="section" id="seccion-4">
             <h2>4. Planificación del proyecto</h2>
             <p>Roadmap de desarrollo basado en metodología CRISP-DM completa:</p>
 
@@ -744,7 +851,7 @@
             </div>
         </section>
 
-        <div class="conclusion">
+        <div class="conclusion" id="seccion-5">
             <h2>5. Conclusión</h2>
             <p><strong>Viabilidad técnica y económica confirmada:</strong> El análisis exhaustivo de las dos primeras
                 fases de CRISP-DM demuestra que el proyecto es técnicamente viable con el stack tecnológico propuesto y
