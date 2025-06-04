@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto Fase 1: Análisis de Alquileres Asequibles en Madrid con IA</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.7;
+            color: #333;
+            /*background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);*/
+            background: linear-gradient(135deg, #AED6F1 0%, #F8E6A0 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .content {
+            padding: 3rem;
+        }
+
+        h2 {
+            color: #2c3e50;
+            font-size: 1.8rem;
+            margin: 2.5rem 0 1.5rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #3498db;
+            position: relative;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: #e74c3c;
+        }
+
+        h3 {
+            color: #34495e;
+            font-size: 1.3rem;
+            margin: 2rem 0 1rem 0;
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 1.2rem;
+            text-align: justify;
+            font-size: 1rem;
+        }
+
+        ul {
+            margin: 1rem 0 1.5rem 2rem;
+        }
+
+        li {
+            margin-bottom: 0.8rem;
+            padding-left: 0.5rem;
+        }
+
+        li::marker {
+            color: #3498db;
+        }
+
+        .table-container {
+            margin: 2rem 0;
+            overflow-x: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            font-size: 0.95rem;
+        }
+
+        th {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        tr:hover {
+            background-color: #e8f4f8;
+            transition: background-color 0.3s ease;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            box-shadow: 0 8px 25px rgba(116, 185, 255, 0.3);
+        }
+
+        .highlight-box h3 {
+            color: white;
+            margin-top: 0;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+            padding: 1.5rem;
+            border-left: 4px solid #3498db;
+            background: #f8f9fa;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .conclusion {
+            background: linear-gradient(135deg, #00b894, #00a085);
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-top: 3rem;
+            box-shadow: 0 8px 25px rgba(0, 184, 148, 0.3);
+        }
+
+        .conclusion h2 {
+            color: white;
+            border-bottom-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .conclusion h2::after {
+            background: white;
+        }
+
+        .footer {
+            background: #2c3e50;
+            color: #bdc3c7;
+            padding: 2rem;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .content {
+                padding: 2rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            table {
+                font-size: 0.85rem;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container fade-in">
+    <div class="header">
+        <h1>Proyecto Fase 1: Análisis de Alquileres Asequibles en Madrid con IA</h1>
+    </div>
+
+    <div class="content">
+        <section class="section">
+            <h2>1. Comprensión del Negocio (CRISP-DM - Fase 1)</h2>
+
+            <h3>1.1. Contexto y motivación</h3>
+            <p>El mercado de alquiler en Madrid presenta un problema evidente: encontrar vivienda asequible se ha
+                convertido en una tarea extremadamente compleja. Definimos "alquiler asequible" como propiedades por
+                debajo de 750€ mensuales, umbral que delimita el acceso real a vivienda para gran parte de la población.
+                La demanda en este segmento supera ampliamente la oferta disponible, creando un desequilibrio que afecta
+                tanto a inquilinos como a propietarios y administraciones públicas que buscan herramientas más
+                eficientes para gestionar esta problemática.</p>
+
+            <h3>1.2. Objetivo general del sistema de IA</h3>
+            <p>El objetivo es desarrollar un sistema de Inteligencia Artificial capaz de predecir el precio justo de
+                alquiler de una propiedad basándose en sus características específicas: superficie, ubicación, estado,
+                tipo de vivienda, equipamiento, etc. El enfoque se centra exclusivamente en el rango de vivienda
+                asequible.</p>
+
+            <p><strong>Propuesta de valor diferencial:</strong></p>
+            <p>A diferencia de las plataformas existentes que utilizan filtros estáticos y promedios zonales básicos,
+                este sistema integra un enfoque innovador:</p>
+            <ul>
+                <li><strong>Procesamiento inteligente de descripciones:</strong> Extracción automática de
+                    características implícitas en el texto de anuncios (estado de conservación, luminosidad,
+                    equipamiento específico) que las herramientas actuales desaprovechan.
+                </li>
+                <li><strong>Explicabilidad integrada:</strong> Cada predicción incluye una explicación clara de los
+                    factores determinantes (ubicación, superficie, equipamiento, etc.) y su peso específico en el precio
+                    final, promoviendo transparencia y confianza del usuario.
+                </li>
+                <li><strong>Enfoque en equidad:</strong> Diseñado específicamente para democratizar el acceso a
+                    información sobre precios justos en el segmento asequible y no para favorecer especulación
+                    inmobiliaria.
+                </li>
+                <li><strong>Análisis geográfico granular:</strong> Identificación de patrones de precio a nivel
+                    micro-geográfico (calle/manzana) que revelan oportunidades no evidentes en análisis por distritos.
+                </li>
+            </ul>
+
+            <div class="highlight-box">
+                <p><strong>Líneas de innovación y estudio de negocio:</strong></p>
+                <p>Funcionalidades de valor añadido que amplían el impacto del sistema:</p>
+                <ul>
+                    <li><strong>Sistema de alertas inteligentes:</strong> Notificación automática cuando una propiedad
+                        presente un precio significativamente inferior al valor estimado por el modelo para su zona y
+                        características.
+                    </li>
+                    <li><strong>Visualización interactiva de mercado:</strong> Mapas de calor que muestran distribución
+                        de oportunidades y zonas con mayor tensión en el mercado asequible.
+                    </li>
+                    <li><strong>Herramienta de precios éticos:</strong> Recomendaciones para propietarios basadas en
+                        análisis comparativo de mercado para establecer precios justos según ubicación y
+                        características.
+                    </li>
+                </ul>
+            </div>
+
+            <p>Este sistema sirve como herramienta de apoyo para inquilinos en búsqueda activa, propietarios que buscan
+                establecer precios justos, y administraciones públicas que necesitan identificar zonas con problemáticas
+                de acceso a vivienda.</p>
+
+            <h3>1.3. Justificación del uso de IA y tecnología concreta</h3>
+            <p><strong>¿Por qué los enfoques tradicionales no son suficientes?</strong></p>
+            <p>El mercado inmobiliario presenta características que hacen inviables los métodos convencionales:</p>
+
+            <p><strong>Limitaciones de métodos no basados en IA:</strong></p>
+            <ul>
+                <li><strong>Regresión lineal simple:</strong> No captura las interacciones complejas entre variables que
+                    se influyen mutuamente. El efecto de la superficie varía significativamente según el barrio y tipo
+                    de vivienda (ej: 10m² extra valen mucho más en Malasaña que en la periferia).
+                </li>
+                <li><strong>Sistemas de reglas fijas:</strong> Requieren actualización manual constante y no se adaptan
+                    a los cambios dinámicos del mercado (ej: "ascensor suma 50€" puede ser válido hoy pero obsoleto en 6
+                    meses cuando cambien las tendencias).
+                </li>
+                <li><strong>Promedios zonales:</strong> Ignoran las características específicas de cada propiedad,
+                    generando estimaciones imprecisas (ej: un bajo sin ascensor no debería valer lo mismo que un cuarto
+                    piso con terraza en la misma calle).
+                </li>
+                <li><strong>Filtros estáticos:</strong> No identifican interacciones entre variables (ej: parking en
+                    centro vs. periferia).
+                </li>
+            </ul>
+
+            <p><strong>Ventajas específicas del enfoque de IA:</strong></p>
+            <ul>
+                <li><strong>Modelado de relaciones no lineales:</strong> Algoritmos como Random Forest y XGBoost
+                    capturan interacciones complejas entre ubicación, características y precio.
+                </li>
+                <li><strong>Aprendizaje de patrones latentes:</strong> Descubrimiento automático de relaciones no
+                    evidentes entre variables.
+                </li>
+                <li><strong>Adaptabilidad temporal:</strong> Capacidad de reentrenamiento con datos actualizados para
+                    mantener relevancia.
+                </li>
+                <li><strong>Procesamiento multimodal:</strong> Integración simultánea de datos numéricos, categóricos,
+                    textuales y geoespaciales.
+                </li>
+                <li><strong>Escalabilidad operativa:</strong> Una vez entrenado, el modelo puede procesar miles de
+                    consultas por segundo sin degradar el rendimiento, algo imposible con análisis manual o reglas que
+                    requieren cálculos complejos para cada consulta.
+                </li>
+            </ul>
+
+            <p><strong>Stack tecnológico seleccionado:</strong></p>
+            <ul>
+                <li><strong>Random Forest y XGBoost:</strong> Para regresión principal, combinando precisión predictiva
+                    con interpretabilidad.
+                </li>
+                <li><strong>TF-IDF y Word2Vec:</strong> Para análisis semántico de descripciones textuales.</li>
+                <li><strong>DBSCAN y K-means:</strong> Para clustering geoespacial y identificación de micro-zonas
+                    homogéneas.
+                </li>
+                <li><strong>SHAP y LIME:</strong> Para explicabilidad de predicciones, cumpliendo requisitos de
+                    transparencia.
+                </li>
+                <li><strong>Pandas y NumPy:</strong> Para manipulación y procesamiento de datos estructurados.</li>
+                <li><strong>Folium y Geopandas:</strong> Para visualización geoespacial y análisis de patrones
+                    geográficos.
+                </li>
+                <li><strong>Scikit-learn:</strong> Framework principal para implementación de modelos y pipeline de ML.
+                </li>
+                <li><strong>Google Maps API:</strong> Para validación y enriquecimiento de datos geográficos.</li>
+                <li><strong>FastAPI:</strong> Para desarrollo de API REST que sirva las predicciones del modelo.</li>
+                <li><strong>Streamlit:</strong> Para prototipado rápido y exploración inicial de funcionalidades.</li>
+                <li><strong>Vue.js:</strong> Para interfaz de usuario final que consuma la API FastAPI.</li>
+                <li><strong>Docker Compose:</strong> Para containerización multi-servicio (API + Frontend).</li>
+                <li><strong>Pytest y FastAPI TestClient:</strong> Para testing automatizado de API endpoints y
+                    validación de modelos de ML.
+                </li>
+                <li><strong>GitHub Actions:</strong> Para CI/CD automatizado con testing, build y despliegue continuo a
+                    AWS.
+                </li>
+                <li><strong>AWS (EC2 + S3):</strong> Para despliegue en la nube del sistema containerizado.</li>
+                <li><strong>APScheduler:</strong> Para automatización tipo cron jobs (reentrenamiento periódico y
+                    detección de oportunidades).
+                </li>
+                <li><strong>SendGrid/SMTP:</strong> Para sistema de notificaciones por email de alertas y oportunidades
+                    detectadas.
+                </li>
+            </ul>
+
+            <h3>1.4. Criterios de éxito</h3>
+            <p><strong>Métricas de rendimiento técnico:</strong></p>
+            <ul>
+                <li><strong>Precisión predictiva:</strong> Error medio absoluto (MAE) ≤ 50€ en predicciones
+                    individuales.
+                </li>
+                <li><strong>Capacidad explicativa:</strong> Coeficiente de determinación (R²) ≥ 0.75 en conjunto de
+                    test.
+                </li>
+                <li><strong>Eficiencia operativa:</strong> Tiempo de respuesta ≤ 2 segundos por consulta.</li>
+                <li><strong>Cobertura geográfica:</strong> Predicciones válidas para ≥90% de códigos postales de Madrid.
+                </li>
+                <li><strong>Estabilidad temporal:</strong> Degradación del modelo <5% mensual sin reentrenamiento.</li>
+            </ul>
+
+            <p><strong>Criterios de impacto y usabilidad:</strong></p>
+            <ul>
+                <li><strong>Explicabilidad práctica:</strong> Cada predicción mostrará los 3-5 factores más importantes
+                    (ubicación, superficie, equipamiento, etc.) en términos que cualquier usuario pueda entender.
+                </li>
+                <li><strong>Diferenciación funcional:</strong> Ofrecer capacidades que no existen actualmente (análisis
+                    automático de descripciones, mapas de micro-zonas, alertas de oportunidades) frente a los filtros
+                    básicos de la competencia.
+                </li>
+                <li><strong>Impacto social medible:</strong> Demostrar que el sistema ayuda realmente a encontrar
+                    vivienda asequible, midiendo feedback de usuarios y tiempo de búsqueda reducido.
+                </li>
+                <li><strong>Transparencia operativa:</strong> Ser honesto sobre cuándo el modelo puede fallar y permitir
+                    que siempre haya revisión humana de las predicciones importantes.
+                </li>
+                <li><strong>Equidad algorítmica:</strong> Verificar que el modelo no discrimine sistemáticamente ciertas
+                    zonas o tipos de vivienda, tratando todos los segmentos de forma justa.
+                </li>
+            </ul>
+
+            <p><strong>Metodología de evaluación:</strong></p>
+            <ul>
+                <li><strong>Validación técnica:</strong> Hold-out test set (split train/test tradicional) y validación
+                    cruzada temporal respetando orden cronológico.
+                </li>
+                <li><strong>Benchmarking comparativo:</strong> Comparación de precisión con estimaciones de portales
+                    inmobiliarios existentes como Idealista y Fotocasa.
+                </li>
+                <li><strong>Evaluación de usabilidad:</strong> Test con usuarios piloto representativos (inquilinos,
+                    propietarios y agentes) midiendo facilidad de uso, comprensión de predicciones y satisfacción
+                    general.
+                </li>
+                <li><strong>Auditoría de equidad:</strong> Verificación de que el modelo no discrimina analizando si los
+                    errores de predicción son similares entre diferentes barrios, tipos de vivienda y rangos de precio.
+                </li>
+            </ul>
+
+            <h3>1.5. Objetivos de minería de datos</h3>
+            <p><strong>Traducción de objetivos de negocio a problemas técnicos de machine learning:</strong></p>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Objetivo de Negocio</th>
+                        <th>Problema de Minería de Datos</th>
+                        <th>Algoritmo Específico</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Predecir precio justo de alquiler</td>
+                        <td>Regresión supervisada con MAE < 50€</td>
+                        <td>Random Forest, XGBoost</td>
+                    </tr>
+                    <tr>
+                        <td>Recomendar propiedades similares</td>
+                        <td>Sistema de recomendación por similitud</td>
+                        <td>Collaborative filtering, Content-based filtering</td>
+                    </tr>
+                    <tr>
+                        <td>Identificar zonas problemáticas</td>
+                        <td>Clustering geográfico de características de precio</td>
+                        <td>K-means, DBSCAN con coordenadas geográficas</td>
+                    </tr>
+                    <tr>
+                        <td>Aprovechar información textual</td>
+                        <td>Extracción de características semánticas</td>
+                        <td>TF-IDF, Word2Vec</td>
+                    </tr>
+                    <tr>
+                        <td>Detectar oportunidades de mercado</td>
+                        <td>Detección de anomalías en precios</td>
+                        <td>Isolation Forest, One-Class SVM</td>
+                    </tr>
+                    <tr>
+                        <td>Garantizar transparencia</td>
+                        <td>Interpretabilidad de modelos</td>
+                        <td>Feature importance, SHAP values, LIME</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>1.6. Evaluación de la situación</h3>
+            <p><strong>Conocimiento previo disponible:</strong></p>
+            <p>Existe investigación consolidada sobre factores determinantes del precio de alquiler en Madrid:
+                ubicación, superficie, proximidad a transporte público, oferta de servicios locales. Sin embargo, la
+                mayoría de las herramientas digitales actuales aplican esta información de manera básica mediante
+                filtros estáticos que no capturan la complejidad real del mercado ni las interacciones entre
+                variables.</p>
+
+            <p><strong>Análisis coste-beneficio:</strong></p>
+            <ul>
+                <li><strong>Estructura de costes:</strong> Moderados y controlables. El dataset está disponible, el
+                    stack tecnológico es conocido y el desarrollo puede realizarse con recursos estándar en un plazo
+                    razonable para prototipo funcional siguiendo metodología CRISP-DM.
+                </li>
+                <li><strong>Beneficios esperados:</strong> Democratización del acceso a información transparente sobre
+                    precios justos, reducción significativa de tiempo de búsqueda para usuarios, y posicionamiento
+                    diferencial como plataforma centrada en equidad en lugar de especulación.
+                </li>
+            </ul>
+
+            <p><strong>Requisitos del problema - Perspectiva de negocio:</strong></p>
+            <ul>
+                <li>Tiempo de respuesta rápido para mantener una experiencia de usuario fluida.</li>
+                <li>Interfaz intuitiva accesible para usuarios sin formación técnica.</li>
+                <li>Alta disponibilidad del sistema para consultas en línea.</li>
+                <li>Capacidad de actualización periódica del modelo con datos recientes.</li>
+            </ul>
+
+            <p><strong>Requisitos del problema - Perspectiva técnica:</strong></p>
+            <ul>
+                <li>Pipeline de ML end-to-end desde datos crudos hasta predicciones desplegadas.</li>
+                <li>Arquitectura modular que permita actualización independiente de componentes.</li>
+                <li>Logging y monitoreo automatizado de rendimiento del modelo en producción.</li>
+                <li>Capacidad de rollback a versiones anteriores del modelo si degrada.</li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2>2. Comprensión de los Datos (CRISP-DM - Fase 2)</h2>
+
+            <h3>2.1. Recopilación inicial de datos</h3>
+            <p>El proyecto utiliza un dataset especializado disponible en Kaggle que recopila anuncios de alquiler en la
+                provincia de Madrid. Los datos provienen de scraping sistemático de portales inmobiliarios principales,
+                proporcionando una muestra representativa del mercado de alquiler actual. Para este proyecto, se
+                aplicará un filtro para seleccionar únicamente propiedades por debajo de 750€ mensuales, eliminando el
+                ruido del mercado premium y centrándose en el segmento asequible de interés.</p>
+
+            <h3>2.2. Descripción de los datos</h3>
+            <p>El dataset presenta una estructura diversificada que permite aplicar múltiples técnicas de machine
+                learning:</p>
+            <ul>
+                <li><strong>Variables numéricas principales:</strong> price (variable objetivo en €), size (superficie
+                    en m²), rooms (número de habitaciones).
+                </li>
+                <li><strong>Variables categóricas:</strong> type (tipología: piso, estudio, ático, dúplex), location
+                    (municipio y distrito).
+                </li>
+                <li><strong>Variables binarias:</strong> conjunto extenso de características (ascensor, parking, balcón,
+                    terraza, amueblado, calefacción, etc.).
+                </li>
+                <li><strong>Contenido textual:</strong> descripción completa del anuncio con información detallada sobre
+                    estado, equipamiento y características específicas.
+                </li>
+                <li><strong>Información geoespacial:</strong> coordenadas geográficas (latitud, longitud) para análisis
+                    espacial y clustering.
+                </li>
+                <li><strong>Metadatos del anuncio:</strong> URLs, identificadores, fechas de publicación (requieren
+                    tratamiento por privacidad).
+                </li>
+            </ul>
+
+            <h3>2.3. Exploración de los datos</h3>
+            <p><strong>Características del volumen y distribución:</strong></p>
+            <ul>
+                <li><strong>Volumen:</strong> Miles de registros suficientes para entrenamiento robusto de modelos.</li>
+                <li><strong>Cobertura geográfica:</strong> Amplia representación de la Comunidad de Madrid con
+                    concentración en la capital.
+                </li>
+                <li><strong>Actualidad temporal:</strong> Datos contemporáneos que reflejan el estado actual del
+                    mercado.
+                </li>
+                <li><strong>Rango de precios:</strong> Distribución completa dentro del umbral de 750€ establecido.</li>
+            </ul>
+
+            <p><strong>Diversidad estructural esperada:</strong></p>
+            <ul>
+                <li><strong>Tipologías variadas:</strong> desde estudios compactos hasta viviendas familiares dentro del
+                    rango asequible.
+                </li>
+                <li><strong>Rango de superficies:</strong> distribución desde 25m² hasta 100m² aproximadamente.</li>
+                <li><strong>Distribución geográfica:</strong> representación heterogénea entre zonas centrales y
+                    periféricas.
+                </li>
+                <li><strong>Equipamiento:</strong> amplia variabilidad en características y servicios incluidos.</li>
+            </ul>
+
+            <h3>2.4. Verificación de calidad de datos</h3>
+            <p><strong>Fortalezas identificadas en el dataset:</strong></p>
+            <ul>
+                <li><strong>Multimodalidad:</strong> Combinación de datos estructurados, texto libre y información
+                    geoespacial permite técnicas avanzadas de ML.
+                </li>
+                <li><strong>Autenticidad:</strong> Datos reales extraídos de anuncios activos, no sintéticos o
+                    simulados.
+                </li>
+                <li><strong>Volumen adecuado:</strong> Tamaño suficiente para entrenamiento sin riesgo de overfitting en
+                    modelos complejos.
+                </li>
+                <li><strong>Especificidad:</strong> Enfoque exclusivo en mercado asequible evita mezcla con segmentos de
+                    precio diferentes.
+                </li>
+            </ul>
+
+            <p><strong>Limitaciones y desafíos identificados:</strong></p>
+            <ul>
+                <li><strong>Missing values:</strong> Campos opcionales como parking o terraza pueden presentar valores
+                    faltantes.
+                </li>
+                <li><strong>Inconsistencias textuales:</strong> Variabilidad en formatos, ortografía y estructura de
+                    descripciones.
+                </li>
+                <li><strong>Duplicados potenciales:</strong> Posible republicación de anuncios o duplicación de
+                    propiedades.
+                </li>
+                <li><strong>Sesgo temporal:</strong> Snapshot del mercado que puede no reflejar variaciones
+                    estacionales.
+                </li>
+                <li><strong>Outliers problemáticos:</strong> Propiedades con características excepcionales que podrían
+                    distorsionar el entrenamiento.
+                </li>
+            </ul>
+
+            <p><strong>Estrategia de preparación requerida:</strong></p>
+            <ul>
+                <li><strong>Pipeline de limpieza:</strong> estandarización de formatos y encoding de caracteres.</li>
+                <li><strong>Tratamiento de missing values:</strong> imputación inteligente mediante técnicas apropiadas.
+                </li>
+                <li><strong>Detección de outliers:</strong> tratamiento estadístico diferenciando outliers genuinos vs.
+                    errores de datos.
+                </li>
+                <li><strong>Preprocesamiento de texto:</strong> tokenización, normalización, eliminación de stopwords.
+                </li>
+                <li><strong>Validación geográfica:</strong> verificación de coherencia en coordenadas, corrección de
+                    errores GPS y completado de campos faltantes mediante APIs de geolocalización.
+                </li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2>3. Evaluación legal y ética</h2>
+
+            <h3>3.1. Clasificación de riesgo según Reglamento UE 2024/1689</h3>
+            <p><strong>Análisis sistemático de exclusión de "riesgo inaceptable":</strong></p>
+            <p>El artículo 5 del <a href="https://www.boe.es/doue/2024/1689/L00001-00144.pdf" target="_blank">Reglamento
+                UE 2024/1689</a> prohíbe específicamente sistemas de IA de riesgo inaceptable. Se verifica punto por
+                punto que nuestro sistema NO incurre en ninguna práctica prohibida:</p>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Práctica Prohibida (Art. 5)</th>
+                        <th>Aplicabilidad</th>
+                        <th>Justificación técnica</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Técnicas subliminales o manipuladoras</td>
+                        <td><strong>NO APLICA</strong></td>
+                        <td>Proporciona estimaciones transparentes sin elementos de manipulación psicológica.</td>
+                    </tr>
+                    <tr>
+                        <td>Explotación de vulnerabilidades por edad/discapacidad</td>
+                        <td><strong>NO APLICA</strong></td>
+                        <td>No segmenta usuarios por características protegidas ni explota vulnerabilidades
+                            específicas.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Puntuación social por autoridades públicas</td>
+                        <td><strong>NO APLICA</strong></td>
+                        <td>Evalúa propiedades inmobiliarias, no personas. Sistema no gubernamental.</td>
+                    </tr>
+                    <tr>
+                        <td>Identificación biométrica en tiempo real</td>
+                        <td><strong>NO APLICA</strong></td>
+                        <td>No procesa, almacena ni analiza datos biométricos.</td>
+                    </tr>
+                    <tr>
+                        <td>Categorización biométrica sensible</td>
+                        <td><strong>NO APLICA</strong></td>
+                        <td>Trabaja exclusivamente con características de inmuebles.</td>
+                    </tr>
+                    <tr>
+                        <td>Reconocimiento de emociones</td>
+                        <td><strong>NO APLICA</strong></td>
+                        <td>Análisis limitado a descripciones textuales de propiedades.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p><strong>Clasificación resultante:</strong> El sistema se clasifica como <strong>riesgo mínimo</strong>.
+            </p>
+
+            <h3>3.2. Protección de datos y principios éticos</h3>
+            <p><strong>Cumplimiento RGPD:</strong> Aunque el dataset no contiene datos personales directos, se
+                implementan medidas preventivas: eliminación de identificadores potencialmente reidentificables (URLs,
+                IDs únicos), anonimización completa de predicciones, limitación de uso a fines académicos e
+                informativos, y aplicación de medidas técnicas de seguridad como encriptación de datos, acceso
+                restringido y logs de auditoría.</p>
+
+            <p><strong>Principios éticos fundamentales:</strong> El sistema se diseña bajo principios de justicia
+                evitando variables discriminatorias, transparencia mediante herramientas de explicabilidad, supervisión
+                humana como herramienta de apoyo no automática y beneficio social priorizando el acceso a vivienda sobre
+                la especulación inmobiliaria.</p>
+        </section>
+
+        <section class="section">
+            <h2>4. Planificación del proyecto</h2>
+            <p>Roadmap de desarrollo basado en metodología CRISP-DM completa:</p>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Fase CRISP-DM</th>
+                        <th>Estado actual</th>
+                        <th>Actividades principales</th>
+                        <th>Herramientas técnicas</th>
+                        <th>Duración estimada</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>1. Comprensión del negocio</td>
+                        <td><strong>COMPLETADA</strong></td>
+                        <td>Definición de objetivos, métricas y criterios de éxito</td>
+                        <td>Análisis documental y planificación</td>
+                        <td>1 semana</td>
+                    </tr>
+                    <tr>
+                        <td>2. Comprensión de datos</td>
+                        <td><strong>COMPLETADA</strong></td>
+                        <td>Caracterización del dataset y evaluación de calidad</td>
+                        <td>Pandas, análisis exploratorio</td>
+                        <td>1 semana</td>
+                    </tr>
+                    <tr>
+                        <td>3. Preparación de datos</td>
+                        <td><em>Planificada</em></td>
+                        <td>EDA, limpieza, feature engineering, validación geográfica</td>
+                        <td>Pandas, Folium, NLTK, Google Maps API</td>
+                        <td>4 semanas</td>
+                    </tr>
+                    <tr>
+                        <td>4. Modelado</td>
+                        <td><em>Planificada</em></td>
+                        <td>Entrenamiento y comparación de algoritmos de regresión</td>
+                        <td>Scikit-learn, XGBoost, Random Forest</td>
+                        <td>4 semanas</td>
+                    </tr>
+                    <tr>
+                        <td>5. Evaluación</td>
+                        <td><em>Planificada</em></td>
+                        <td>Validación, interpretabilidad y benchmarking</td>
+                        <td>SHAP, LIME, métricas de evaluación</td>
+                        <td>2 semanas</td>
+                    </tr>
+                    <tr>
+                        <td>6. Despliegue</td>
+                        <td><em>Planificada</em></td>
+                        <td>API, interfaz web, testing, CI/CD y despliegue cloud</td>
+                        <td>FastAPI, Vue.js, Docker, Pytest, GitHub Actions, AWS</td>
+                        <td>6 semanas</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <div class="conclusion">
+            <h2>5. Conclusión</h2>
+            <p><strong>Viabilidad técnica y económica confirmada:</strong> El análisis exhaustivo de las dos primeras
+                fases de CRISP-DM demuestra que el proyecto es técnicamente viable con el stack tecnológico propuesto y
+                económicamente justificable. Los costes son moderados y controlables, mientras que el potencial impacto
+                social y la diferenciación técnica justifican la inversión requerida.</p>
+
+            <p><strong>Cumplimiento normativo asegurado:</strong> El sistema se clasifica como riesgo mínimo según el
+                Reglamento UE 2024/1689, cumple con los requisitos RGPD para protección de datos y está diseñado
+                siguiendo principios éticos de transparencia, equidad y beneficio social desde la conceptualización.</p>
+
+            <p><strong>Calidad de datos validada:</strong> El dataset disponible presenta las características necesarias
+                para el entrenamiento exitoso de modelos de IA: suficiente volumen, variedad multimodal, autenticidad y
+                especificidad en el segmento objetivo. Las limitaciones identificadas son abordables mediante técnicas
+                estándar de preparación de datos.</p>
+
+            <p><strong>Confianza en la ejecución:</strong> Tengo experiencia práctica con el ecosistema tecnológico
+                propuesto - desde machine learning y procesamiento de datos hasta desarrollo de APIs y despliegue en la
+                nube. Esta familiaridad técnica, combinada con la solidez de la planificación realizada, me genera
+                confianza en que el proyecto no solo es viable sobre el papel, sino ejecutable de manera eficiente y
+                exitosa.</p>
+
+            <p><strong>Preparación para fases siguientes:</strong> Con la fundamentación conceptual sólida y la
+                caracterización completa de los datos, el proyecto está preparado para avanzar hacia las fases de
+                preparación de datos y modelado. Los objetivos están claramente definidos, las métricas de éxito
+                establecidas y la estrategia técnica decidida, manteniendo en todo momento los estándares éticos y
+                legales requeridos.</p>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Proyecto Fase 1 • Análisis de Alquileres Asequibles en Madrid con IA</p>
+        <p>Autor • Asier Ortiz</p>
+    </div>
+</div>
+</body>
+</html>
