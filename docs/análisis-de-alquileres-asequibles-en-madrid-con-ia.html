@@ -631,6 +631,9 @@
                 </li>
                 <li><strong>Scikit-learn:</strong> Framework principal para implementación de modelos y pipeline de ML.
                 </li>
+                <li><strong>FAISS:</strong> Para búsqueda eficiente de propiedades similares y
+                    análisis semántico avanzado en el sistema de recomendación.
+                </li>
                 <li><strong>Google Maps API:</strong> Para validación y enriquecimiento de datos geográficos.</li>
                 <li><strong>FastAPI:</strong> Para desarrollo de API REST que sirva las predicciones del modelo.</li>
                 <li><strong>Streamlit:</strong> Para prototipado rápido y exploración inicial de funcionalidades.</li>
@@ -765,7 +768,7 @@
                     razonable para prototipo funcional siguiendo metodología CRISP-DM.
                 </li>
                 <li><strong>Beneficios esperados:</strong> Democratización del acceso a información transparente sobre
-                    precios justos, reducción significativa de tiempo de búsqueda para usuarios, y posicionamiento
+                    precios justos, reducción significativa de tiempo de búsqueda para usuarios y posicionamiento
                     diferencial como plataforma centrada en equidad en lugar de especulación.
                 </li>
             </ul>
@@ -960,7 +963,7 @@
             <p><strong>Cumplimiento RGPD:</strong> Aunque el dataset no contiene datos personales directos, se
                 implementan medidas preventivas: eliminación de identificadores potencialmente reidentificables (URLs,
                 IDs únicos), anonimización completa de predicciones, limitación de uso a fines académicos e
-                informativos, y aplicación de medidas técnicas de seguridad como encriptación de datos, acceso
+                informativos y aplicación de medidas técnicas de seguridad como encriptación de datos, acceso
                 restringido y logs de auditoría.</p>
 
             <p><strong>Principios éticos fundamentales:</strong> El sistema se diseña bajo principios de justicia
@@ -1002,21 +1005,21 @@
                     <tr>
                         <td>3. Preparación de datos</td>
                         <td><em>Planificada</em></td>
-                        <td>EDA, limpieza, feature engineering, validación geográfica</td>
-                        <td>Pandas, Folium, NLTK, Google Maps API</td>
+                        <td>EDA, limpieza, feature engineering, validación geográfica, vectorización de texto</td>
+                        <td>Pandas, Folium, TF-IDF, Word2Vec, Google Maps API</td>
                         <td>4 semanas</td>
                     </tr>
                     <tr>
                         <td>4. Modelado</td>
                         <td><em>Planificada</em></td>
-                        <td>Entrenamiento y comparación de algoritmos de regresión</td>
-                        <td>Scikit-learn, XGBoost, Random Forest</td>
+                        <td>Entrenamiento de modelos de regresión, clustering y sistema de recomendación</td>
+                        <td>Scikit-learn, XGBoost, Random Forest, FAISS, K-means, DBSCAN</td>
                         <td>4 semanas</td>
                     </tr>
                     <tr>
                         <td>5. Evaluación</td>
                         <td><em>Planificada</em></td>
-                        <td>Validación, interpretabilidad y benchmarking</td>
+                        <td>Validación de modelos, interpretabilidad, benchmarking y evaluación de recomendaciones</td>
                         <td>SHAP, LIME, métricas de evaluación</td>
                         <td>2 semanas</td>
                     </tr>
