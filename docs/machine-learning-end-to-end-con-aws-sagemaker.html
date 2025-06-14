@@ -1,0 +1,2547 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto Fase 4: Machine Learning End-to-End con AWS SageMaker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.7;
+            color: #333;
+            background: linear-gradient(135deg, #AED6F1 0%, #F8E6A0 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .content {
+            padding: 3rem;
+        }
+
+        h2 {
+            color: #2c3e50;
+            font-size: 1.8rem;
+            margin: 2.5rem 0 1.5rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #3498db;
+            position: relative;
+            scroll-margin-top: 2rem;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: #e74c3c;
+        }
+
+        h3 {
+            color: #34495e;
+            font-size: 1.3rem;
+            margin: 2rem 0 1rem 0;
+            font-weight: 600;
+            scroll-margin-top: 2rem;
+        }
+
+        h4 {
+            color: #34495e;
+            font-size: 1.1rem;
+            margin: 1.5rem 0 0.8rem 0;
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 1.2rem;
+            text-align: justify;
+            font-size: 1rem;
+        }
+
+        ul {
+            margin: 1rem 0 1.5rem 2rem;
+        }
+
+        li {
+            margin-bottom: 0.8rem;
+            padding-left: 0.5rem;
+        }
+
+        li::marker {
+            color: #3498db;
+        }
+
+        .table-container {
+            margin: 2rem 0;
+            overflow-x: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            font-size: 0.95rem;
+        }
+
+        th {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        tr:hover {
+            background-color: #e8f4f8;
+            transition: background-color 0.3s ease;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            box-shadow: 0 8px 25px rgba(116, 185, 255, 0.3);
+        }
+
+        .highlight-box h3 {
+            color: white;
+            margin-top: 0;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+            padding: 1.5rem;
+            border-left: 4px solid #3498db;
+            background: #f8f9fa;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .conclusion {
+            background: linear-gradient(135deg, #00b894, #00a085);
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-top: 3rem;
+            box-shadow: 0 8px 25px rgba(0, 184, 148, 0.3);
+        }
+
+        .conclusion h2 {
+            color: white;
+            border-bottom-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .conclusion h2::after {
+            background: white;
+        }
+
+        .footer {
+            background: #2c3e50;
+            color: #bdc3c7;
+            padding: 2rem;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .table-of-contents {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 3rem;
+            border-left: 5px solid #3498db;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .table-of-contents h2 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 0.5rem;
+        }
+
+        .toc-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .toc-list > li {
+            margin-bottom: 1rem;
+            padding-left: 0;
+        }
+
+        .toc-list > li > a {
+            color: #2c3e50;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: block;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(52, 152, 219, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .toc-list > li > a:hover {
+            color: #3498db;
+            padding-left: 1rem;
+            border-bottom-color: #3498db;
+        }
+
+        .toc-list ul {
+            list-style: none;
+            margin: 0.5rem 0 0 1.5rem;
+            padding: 0;
+        }
+
+        .toc-list ul li {
+            margin-bottom: 0.5rem;
+            padding-left: 0;
+        }
+
+        .toc-list ul li a {
+            color: #555;
+            text-decoration: none;
+            font-size: 0.95rem;
+            display: block;
+            padding: 0.3rem 0;
+            transition: all 0.3s ease;
+            border-left: 2px solid transparent;
+            padding-left: 0.5rem;
+        }
+
+        .toc-list ul li a:hover {
+            color: #3498db;
+            border-left-color: #3498db;
+            padding-left: 1rem;
+        }
+
+        /* Estilos para imágenes y modal */
+        .image-container {
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .clickable-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .clickable-image:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .image-caption {
+            font-style: italic;
+            color: #666;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        /* Modal para ampliar imágenes */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            display: block;
+            margin: auto;
+            max-width: 90%;
+            max-height: 90%;
+            margin-top: 2%;
+            border-radius: 8px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-caption {
+            text-align: center;
+            color: white;
+            padding: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close:hover {
+            color: #3498db;
+        }
+
+        /* Estilos para código */
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .code-block code {
+            color: #58d68d;
+        }
+
+        /* Estilos para alertas/notas */
+        .alert {
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            border-left: 4px solid;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            border-color: #17a2b8;
+            color: #0c5460;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            border-color: #ffc107;
+            color: #856404;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+
+        .alert-danger {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            body {
+                padding: 0.5rem;
+            }
+
+            .container {
+                border-radius: 10px;
+            }
+
+            .header {
+                padding: 2rem 1.5rem;
+            }
+
+            .header h1 {
+                font-size: 1.75rem;
+                line-height: 1.3;
+            }
+
+            .content {
+                padding: 1.5rem;
+            }
+
+            h2 {
+                font-size: 1.4rem;
+                margin: 2rem 0 1rem 0;
+            }
+
+            h3 {
+                font-size: 1.15rem;
+                margin: 1.5rem 0 0.8rem 0;
+            }
+
+            .modal-content {
+                max-width: 95%;
+                margin-top: 10%;
+            }
+
+            .close {
+                top: 10px;
+                right: 20px;
+                font-size: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container fade-in">
+    <div class="header">
+        <h1>Proyecto Fase 4: Machine Learning End-to-End con AWS SageMaker</h1>
+    </div>
+
+    <div class="content">
+
+        <div class="table-of-contents">
+            <h2>Índice</h2>
+            <ul class="toc-list">
+                <li><a href="#seccion-1">1. Entendimiento del Negocio y Diseño del Caso de Uso</a>
+                    <ul>
+                        <li><a href="#seccion-1-1">1.1. Contexto y Objetivo</a></li>
+                        <li><a href="#seccion-1-2">1.2. Justificación del Dataset</a></li>
+                        <li><a href="#seccion-1-3">1.3. Criterios de Éxito</a></li>
+                    </ul>
+                </li>
+                <li><a href="#seccion-2">2. EDA (Exploratory Data Analysis)</a>
+                    <ul>
+                        <li><a href="#seccion-2-1">2.1. Carga de Datos desde Amazon S3</a></li>
+                        <li><a href="#seccion-2-2">2.2. Análisis de Data Quality e Insights</a></li>
+                        <li><a href="#seccion-2-3">2.3. Análisis de Target Leakage</a></li>
+                        <li><a href="#seccion-2-4">2.4. Correlación de Características</a></li>
+                        <li><a href="#seccion-2-5">2.5. Informe de BIAS</a></li>
+                        <li><a href="#seccion-2-6">2.6. Informe de Quick Model</a></li>
+                    </ul>
+                </li>
+                <li><a href="#seccion-3">3. Ingeniería de Características</a>
+                    <ul>
+                        <li><a href="#seccion-3-1">3.1. Selección de Columnas</a></li>
+                        <li><a href="#seccion-3-2">3.2. Transformación y Creación de Columnas</a></li>
+                        <li><a href="#seccion-3-3">3.3. Pipeline de Transformación</a></li>
+                    </ul>
+                </li>
+                <li><a href="#seccion-4">4. Entrenamiento del Modelo</a>
+                    <ul>
+                        <li><a href="#seccion-4-1">4.1. Configuración de SageMaker Autopilot</a></li>
+                        <li><a href="#seccion-4-2">4.2. Ajuste de Hiperparámetros</a></li>
+                        <li><a href="#seccion-4-3">4.3. Entrenamiento de Múltiples Modelos</a></li>
+                        <li><a href="#seccion-4-4">4.4. Selección del Mejor Modelo</a></li>
+                    </ul>
+                </li>
+                <li><a href="#seccion-5">5. Evaluación y Registro del Modelo</a>
+                    <ul>
+                        <li><a href="#seccion-5-1">5.1. Análisis de Sesgo con SageMaker Clarify</a></li>
+                        <li><a href="#seccion-5-2">5.2. Registro en Model Registry</a></li>
+                    </ul>
+                </li>
+                <li><a href="#seccion-6">6. Despliegue del Modelo</a>
+                    <ul>
+                        <li><a href="#seccion-6-1">6.1. Inferencias Batch</a></li>
+                        <li><a href="#seccion-6-2">6.2. Endpoint en Tiempo Real</a></li>
+                    </ul>
+                </li>
+                <li><a href="#seccion-7">7. Monitorización y Mantenimiento</a>
+                    <ul>
+                        <li><a href="#seccion-7-1">7.1. Panel de SageMaker</a></li>
+                        <li><a href="#seccion-7-2">7.2. Logs de Amazon CloudWatch</a></li>
+                        <li><a href="#seccion-7-3">7.3. Métricas en Amazon S3</a></li>
+                    </ul>
+                </li>
+                <li><a href="#seccion-8">8. Conclusiones y Lecciones Aprendidas</a></li>
+            </ul>
+        </div>
+
+        <section class="section" id="seccion-1">
+            <h2>1. Entendimiento del Negocio y Diseño del Caso de Uso</h2>
+
+            <h3 id="seccion-1-1">1.1. Contexto y Objetivo</h3>
+            <p>El mercado de alquiler en Madrid presenta desafíos significativos tanto para inquilinos como para
+                propietarios a la hora de establecer precios justos y transparentes. El objetivo de este proyecto es
+                desarrollar un sistema de Machine Learning end-to-end que prediga con precisión el precio de alquiler de
+                una propiedad basándose en sus características específicas, cubriendo todo el rango de precios del
+                mercado madrileño.</p>
+
+            <p>Este sistema permitirá:</p>
+            <ul>
+                <li>A los inquilinos: evaluar si un precio de alquiler es justo según las características de la
+                    propiedad
+                </li>
+                <li>A los propietarios: establecer precios competitivos y realistas</li>
+                <li>A profesionales inmobiliarios: disponer de una herramienta de valoración automatizada</li>
+                <li>Al mercado en general: mayor transparencia en la formación de precios</li>
+            </ul>
+
+            <div class="alert alert-info">
+                <strong>Objetivo del Sistema:</strong> Desarrollar un sistema ML end-to-end que permita predecir precios
+                de alquiler de manera precisa y transparente para todo el mercado madrileño.
+            </div>
+
+            <h3 id="seccion-1-2">1.2. Justificación del Dataset</h3>
+            <p>Se utiliza el dataset de alquileres de Madrid obtenido de Kaggle, que contiene información exhaustiva
+                sobre propiedades en alquiler. El dataset original contiene 9,229 registros con 34 variables que cubren
+                características físicas, equipamiento, ubicación y precios de todo el mercado madrileño.</p>
+
+            <p><strong>Enriquecimiento geográfico previo:</strong> Como trabajo preparatorio en fases anteriores del
+                proyecto, se añadieron al dataset original las coordenadas geográficas (latitud y longitud) utilizando
+                la API de Google Maps. Este proceso se realizó mediante código personalizado que procesó las direcciones
+                disponibles en las columnas de ubicación existentes para obtener las coordenadas precisas.</p>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Categoría</th>
+                        <th>Variables Incluidas</th>
+                        <th>Ejemplo de Datos</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Identificación</td>
+                        <td>web_id, url, title</td>
+                        <td>ID único, enlace, título del anuncio</td>
+                    </tr>
+                    <tr>
+                        <td>Información Básica</td>
+                        <td>type, price, deposit, private_owner</td>
+                        <td>Piso, 1200€, 2400€, True</td>
+                    </tr>
+                    <tr>
+                        <td>Características Físicas</td>
+                        <td>floor_area, bedrooms, bathrooms, floor, year_built, orientation</td>
+                        <td>80m², 2 hab., 1 baño, 3º, 1985, Sur</td>
+                    </tr>
+                    <tr>
+                        <td>Equipamiento</td>
+                        <td>lift, garage_included, furnished, equipped_kitchen, etc.</td>
+                        <td>13 variables booleanas de características</td>
+                    </tr>
+                    <tr>
+                        <td>Ubicación</td>
+                        <td>location, district, subdistrict, postalcode, lat, lng</td>
+                        <td>Malasaña, Centro, Universidad, 28004, 40.4267, -3.7038</td>
+                    </tr>
+                    <tr>
+                        <td>Metadatos</td>
+                        <td>professional_name, last_update</td>
+                        <td>Agencia, fecha actualización</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p>Este dataset es ideal para el caso de uso porque:</p>
+            <ul>
+                <li><strong>Datos reales y actualizados:</strong> Información extraída de portales inmobiliarios activos
+                </li>
+                <li><strong>Cobertura completa:</strong> Representa todo el rango de precios del mercado madrileño</li>
+                <li><strong>Variables relevantes:</strong> Incluye factores determinantes del precio como ubicación,
+                    superficie y equipamiento
+                </li>
+                <li><strong>Volumen adecuado:</strong> Suficientes registros para entrenamiento robusto de modelos ML
+                </li>
+                <li><strong>Información geográfica enriquecida:</strong> Coordenadas precisas obtenidas via Google Maps
+                    API permiten cálculos de distancia y análisis de ubicación
+                </li>
+            </ul>
+
+            <div class="alert alert-info">
+                <strong>Procesamiento en AWS:</strong> Todo el procesamiento de datos (limpieza, transformación, feature
+                engineering) se realizará utilizando las herramientas de AWS SageMaker, específicamente Data Wrangler,
+                como parte del pipeline ML end-to-end.
+            </div>
+
+            <h3 id="seccion-1-3">1.3. Criterios de Éxito</h3>
+            <p>Los criterios de éxito definidos para este proyecto ML end-to-end incluyen:</p>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Categoría</th>
+                        <th>Métrica</th>
+                        <th>Objetivo</th>
+                        <th>Justificación</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Precisión Técnica</td>
+                        <td>MAE (Error Absoluto Medio)</td>
+                        <td>≤ 400€</td>
+                        <td>Error aceptable para decisiones de alquiler</td>
+                    </tr>
+                    <tr>
+                        <td>Capacidad Explicativa</td>
+                        <td>R² (Coeficiente de Determinación)</td>
+                        <td>≥ 0.75</td>
+                        <td>El modelo explica al menos 75% de la varianza</td>
+                    </tr>
+                    <tr>
+                        <td>Rendimiento Operativo</td>
+                        <td>Tiempo de Respuesta</td>
+                        <td>≤ 2 segundos</td>
+                        <td>Experiencia de usuario fluida</td>
+                    </tr>
+                    <tr>
+                        <td>Robustez</td>
+                        <td>RMSE (Error Cuadrático Medio)</td>
+                        <td>≤ 600€</td>
+                        <td>Control de predicciones extremas</td>
+                    </tr>
+                    <tr>
+                        <td>Aplicabilidad Práctica</td>
+                        <td>MAPE (Error Porcentual Absoluto)</td>
+                        <td>≤ 20%</td>
+                        <td>Error relativo aceptable para valoraciones</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p><strong>Metodología de evaluación:</strong> Los criterios serán validados mediante división train/test
+                tradicional y evaluación con métricas estándar de regresión, complementado con análisis de sesgo para
+                garantizar equidad en las predicciones.</p>
+        </section>
+
+        <section class="section" id="seccion-2">
+            <h2>2. EDA (Exploratory Data Analysis)</h2>
+
+            <h3 id="seccion-2-1">2.1. Carga de Datos desde Amazon S3</h3>
+            <p>El dataset de alquileres de Madrid (madrid_rent.csv) se cargó exitosamente en Amazon S3 para su posterior
+                análisis con SageMaker Data Wrangler.</p>
+
+            <div class="image-container">
+                <img src="images/madrid-rent-dataset-s3.webp" alt="Dataset madrid_rent.csv almacenado en Amazon S3"
+                     class="clickable-image">
+                <p class="image-caption">Figura 1: Dataset madrid_rent.csv almacenado en Amazon S3</p>
+            </div>
+
+            <h3 id="seccion-2-2">2.2. Análisis de Data Quality e Insights</h3>
+            <p>Se realizó un análisis exhaustivo de la calidad y distribución de las variables del dataset utilizando
+                SageMaker Data Wrangler. Los hallazgos principales se detallan a continuación:</p>
+
+            <div class="highlight-box">
+                <h3>Variables Numéricas</h3>
+                <p><strong>Price (variable objetivo):</strong></p>
+                <ul>
+                    <li>Distribución fuertemente sesgada hacia la derecha con pocos valores muy altos que desbalancean
+                        el conjunto
+                    </li>
+                    <li>La mayoría de precios están agrupados en la parte baja del rango, sugiriendo presencia de
+                        outliers
+                    </li>
+                    <li>Esto puede afectar a modelos sensibles a escalas o distribuciones no normales</li>
+                </ul>
+                <p><strong>Columnas numéricas adicionales (floor_area, bathrooms, bedrooms, etc.):</strong></p>
+                <ul>
+                    <li>Algunas variables muestran también sesgo, otras están más centradas</li>
+                    <li>Presencia de valores faltantes (nulls) en varios casos</li>
+                    <li>Outliers evidentes detectados mediante análisis de boxplots y rangos intercuartílicos</li>
+                </ul>
+            </div>
+
+            <div class="alert alert-warning">
+                <h3>Variables Categóricas</h3>
+                <p><strong>Alta cardinalidad:</strong></p>
+                <ul>
+                    <li>Columnas como location, district tienen múltiples categorías (>50), lo que puede complicar el
+                        modelado
+                    </li>
+                    <li>Muchos valores con frecuencia muy baja (frecuencia = 1) que aportan poco valor informativo</li>
+                    <li>Será necesario aplicar técnicas de reducción como target encoding o agrupaciones</li>
+                </ul>
+                <p><strong>Imbalance categórico:</strong></p>
+                <ul>
+                    <li>Algunas categorías representan más del 90% de los casos, siendo poco informativas</li>
+                    <li>Distribución muy desigual que requerirá tratamiento específico</li>
+                </ul>
+            </div>
+
+            <div class="alert alert-danger">
+                <h3>Problemas Detectados</h3>
+                <p><strong>Valores faltantes (Missing Values):</strong></p>
+                <ul>
+                    <li>Múltiples columnas presentan valores nulos en diferentes proporciones</li>
+                    <li>Algunas columnas con hasta 40% de datos ausentes - candidatas a eliminación o imputación</li>
+                </ul>
+                <p><strong>Outliers:</strong></p>
+                <ul>
+                    <li>Outliers claros especialmente en precio y superficie</li>
+                    <li>Detectados mediante boxplots y análisis de rangos intercuartílicos (IQR)</li>
+                </ul>
+                <p><strong>Datos desbalanceados:</strong></p>
+                <ul>
+                    <li>Desbalance tanto en variables categóricas como en distribución del target</li>
+                    <li>Requerirá técnicas de normalización o transformación logarítmica</li>
+                </ul>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Aspecto de Calidad</th>
+                        <th>Estado</th>
+                        <th>Acción Requerida</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Valores faltantes</td>
+                        <td>Presentes en múltiples columnas</td>
+                        <td>Imputación o eliminación de columnas</td>
+                    </tr>
+                    <tr>
+                        <td>Outliers</td>
+                        <td>Detectados en variables clave</td>
+                        <td>Tratamiento estadístico específico</td>
+                    </tr>
+                    <tr>
+                        <td>Distribución target</td>
+                        <td>Sesgada hacia la derecha</td>
+                        <td>Transformación logarítmica</td>
+                    </tr>
+                    <tr>
+                        <td>Cardinalidad categórica</td>
+                        <td>Alta en variables de ubicación</td>
+                        <td>Target encoding o agrupaciones</td>
+                    </tr>
+                    <tr>
+                        <td>Calidad general</td>
+                        <td>Moderada</td>
+                        <td>Pipeline de limpieza robusto</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="alert alert-success">
+                <h3>Insights Adicionales</h3>
+                <ul>
+                    <li><strong>Correlaciones implícitas:</strong> Se pueden inferir relaciones lógicas entre variables
+                        como superficie y precio
+                    </li>
+                    <li><strong>Potencial de mejora:</strong> La calidad de datos es moderada pero con trabajo de
+                        limpieza se puede optimizar para modelado
+                    </li>
+                    <li><strong>Necesidad de transformaciones:</strong> Especialmente normalización y transformación
+                        logarítmica para variables como price
+                    </li>
+                    <li><strong>Oportunidades de feature engineering:</strong> Las coordenadas geográficas permiten
+                        crear variables derivadas útiles
+                    </li>
+                </ul>
+            </div>
+
+            <p><strong>📊 Reporte Completo:</strong> El análisis detallado completo generado por Data Wrangler está
+                disponible en el repositorio del proyecto: <a href="#" target="_blank">Data Quality Report - SageMaker
+                    Data Wrangler</a></p>
+
+            <h3 id="seccion-2-3">2.3. Análisis de Target Leakage</h3>
+            <p>Se realizó un análisis exhaustivo de target leakage utilizando SageMaker Data Wrangler para detectar
+                variables que podrían contener información del futuro o duplicar la variable objetivo. El análisis
+                evalúa la capacidad predictiva individual de cada variable mediante validación cruzada en una muestra de
+                1,000 registros.</p>
+
+            <div class="image-container">
+                <img src="images/target-leakage.webp" alt="Análisis de target leakage" class="clickable-image">
+                <p class="image-caption">Figura 2: Análisis de target leakage - Capacidad predictiva individual por
+                    variable</p>
+            </div>
+
+            <div class="alert alert-info">
+                <h3>Interpretación de Resultados</h3>
+                <p><strong>Escala de interpretación (R²):</strong></p>
+                <ul>
+                    <li><strong>1.0:</strong> Target leakage perfecto - Variable idéntica al target</li>
+                    <li><strong>0.7-0.9:</strong> Likely target leakage - Probable filtración</li>
+                    <li><strong>0.5-0.7:</strong> Possibly target leakage - Posible filtración</li>
+                    <li><strong>0.2-0.5:</strong> Safe - Variables seguras con correlación normal</li>
+                    <li><strong>0.0-0.2:</strong> Possibly redundant - Posiblemente redundantes</li>
+                </ul>
+            </div>
+
+            <div class="highlight-box">
+                <h3>Variables Analizadas y Resultados</h3>
+                <p><strong>Variables SEGURAS (R² < 0.5):</strong></p>
+                <ul>
+                    <li><strong>Variables de estructura física:</strong> floor_built, bathrooms, bedrooms (~0.45-0.5) -
+                        Correlación alta pero esperada
+                    </li>
+                    <li><strong>Variables de ubicación:</strong> subdistrict, floor_area, type (~0.3-0.4) - Relación
+                        lógica con el precio
+                    </li>
+                    <li><strong>Variables de equipamiento:</strong> lift, air_conditioning, garage_included (~0.25-0.35)
+                        - Impacto moderado esperado
+                    </li>
+                    <li><strong>Variables geográficas:</strong> district, lat, lng, location (~0.2-0.3) - Correlación
+                        geográfica normal
+                    </li>
+                </ul>
+
+                <p><strong>Variables PROBLEMÁTICAS (R² cercano a 0):</strong></p>
+                <ul>
+                    <li><strong>Variables de metadatos:</strong> url, title, last_update, web_id - Muy baja capacidad
+                        predictiva
+                    </li>
+                    <li><strong>Variables redundantes:</strong> furnished, equipped_kitchen, year_built - Posiblemente
+                        redundantes
+                    </li>
+                    <li><strong>Candidatas a eliminación:</strong> orientation, garden_area, terrace - Aporte mínimo al
+                        modelo
+                    </li>
+                </ul>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Categoría de Riesgo</th>
+                        <th>Rango R²</th>
+                        <th>Variables Identificadas</th>
+                        <th>Acción Recomendada</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Target Leakage</td>
+                        <td>0.7 - 1.0</td>
+                        <td>Ninguna detectada</td>
+                        <td>✅ No requiere acción</td>
+                    </tr>
+                    <tr>
+                        <td>Likely Leakage</td>
+                        <td>0.5 - 0.7</td>
+                        <td>Ninguna detectada</td>
+                        <td>✅ No requiere acción</td>
+                    </tr>
+                    <tr>
+                        <td>Variables Útiles</td>
+                        <td>0.2 - 0.5</td>
+                        <td>floor_built, bathrooms, bedrooms, district, etc.</td>
+                        <td>✅ Mantener para modelado</td>
+                    </tr>
+                    <tr>
+                        <td>Variables Redundantes</td>
+                        <td>0.0 - 0.2</td>
+                        <td>url, title, orientation, garden_area</td>
+                        <td>⚠️ Evaluar eliminación</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="alert alert-success">
+                <strong>Conclusión del Análisis:</strong> No se detectó target leakage significativo en el dataset. Las
+                variables con mayor capacidad predictiva (floor_built, bathrooms, bedrooms) muestran correlaciones
+                lógicas y esperadas con el precio de alquiler. Las variables con R² muy bajo son candidatas para
+                eliminación en la fase de feature selection para optimizar el modelo.
+            </div>
+
+            <div class="alert alert-warning">
+                <strong>Recomendaciones:</strong>
+                <ul>
+                    <li>Eliminar variables de metadatos (url, title, web_id) que no aportan valor predictivo</li>
+                    <li>Evaluar la utilidad de variables con R² < 0.1 como orientation y garden_area</li>
+                    <li>Mantener todas las variables con R² > 0.2 ya que representan relaciones legítimas</li>
+                    <li>Considerar feature engineering para maximizar el valor de variables con correlación moderada
+                    </li>
+                </ul>
+            </div>
+
+            <h3 id="seccion-2-4">2.4. Correlación de Características</h3>
+            <p>Se realizó un análisis de correlación de características utilizando el coeficiente de Pearson para
+                variables numéricas y encoding automático para variables categóricas. El análisis identifica las
+                relaciones más fuertes entre variables y con el target (precio).</p>
+
+            <div class="image-container">
+                <img src="images/feature-correlation.webp" alt="Análisis de correlación de características"
+                     class="clickable-image">
+                <p class="image-caption">Figura 3: Análisis de correlación entre características - Tabla de
+                    correlaciones más significativas</p>
+            </div>
+
+            <div class="alert alert-info">
+                <h3>Metodología del Análisis</h3>
+                <p><strong>Cálculo de correlaciones:</strong></p>
+                <ul>
+                    <li><strong>Numérico-Numérico:</strong> Correlación de Pearson (rango [-1, 1])</li>
+                    <li><strong>Numérico-Categórico:</strong> Encoding categórico seguido de correlación de Pearson</li>
+                    <li><strong>Categórico-Categórico:</strong> Coeficiente de correlación tras encoding numérico</li>
+                    <li><strong>Variables ignoradas:</strong> Características que no son numéricas ni categóricas</li>
+                </ul>
+            </div>
+
+            <div class="highlight-box">
+                <h3>Correlaciones Más Significativas Detectadas</h3>
+
+                <p><strong>🔴 CORRELACIONES MUY ALTAS (> 0.8) - Posible Multicolinealidad:</strong></p>
+                <ul>
+                    <li><strong>floor_built ↔ floor_area:</strong> 0.913 - Superficie y año de construcción muy
+                        correlacionados
+                    </li>
+                    <li><strong>bathrooms ↔ floor_built:</strong> 0.804 - Propiedades más nuevas tienden a tener más
+                        baños
+                    </li>
+                </ul>
+
+                <p><strong>🟡 CORRELACIONES ALTAS (0.6-0.8) - Relaciones Lógicas:</strong></p>
+                <ul>
+                    <li><strong>bedrooms ↔ bathrooms:</strong> 0.739 - Más habitaciones = más baños (esperado)</li>
+                    <li><strong>price ↔ floor_area:</strong> 0.728 - Superficie es un factor clave del precio</li>
+                    <li><strong>type ↔ floor_built:</strong> 0.608 - Tipo de vivienda relacionado con época de
+                        construcción
+                    </li>
+                </ul>
+
+                <p><strong>🟢 CORRELACIONES MODERADAS (0.4-0.6) - Variables Relevantes:</strong></p>
+                <ul>
+                    <li><strong>lift ↔ floor_built:</strong> 0.556 - Edificios más nuevos tienen ascensor</li>
+                    <li><strong>lat ↔ lng:</strong> 0.492 - Correlación geográfica normal</li>
+                    <li><strong>swimming_pool ↔ year_built:</strong> 0.448 - Piscinas más comunes en construcciones
+                        recientes
+                    </li>
+                </ul>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Variable Principal</th>
+                        <th>Variable Más Correlacionada</th>
+                        <th>Correlación</th>
+                        <th>Interpretación</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>price (TARGET)</td>
+                        <td>floor_area</td>
+                        <td>0.728</td>
+                        <td>✅ Superficie es el predictor más fuerte</td>
+                    </tr>
+                    <tr>
+                        <td>floor_built</td>
+                        <td>floor_area</td>
+                        <td>0.913</td>
+                        <td>⚠️ Posible multicolinealidad</td>
+                    </tr>
+                    <tr>
+                        <td>bathrooms</td>
+                        <td>floor_built</td>
+                        <td>0.804</td>
+                        <td>⚠️ Posible multicolinealidad</td>
+                    </tr>
+                    <tr>
+                        <td>bedrooms</td>
+                        <td>bathrooms</td>
+                        <td>0.739</td>
+                        <td>✅ Relación lógica esperada</td>
+                    </tr>
+                    <tr>
+                        <td>air_conditioning</td>
+                        <td>price</td>
+                        <td>0.215</td>
+                        <td>✅ Impacto moderado en precio</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="alert alert-warning">
+                <h3>Problemas de Multicolinealidad Detectados</h3>
+                <p><strong>Variables altamente correlacionadas que requieren atención:</strong></p>
+                <ul>
+                    <li><strong>floor_built vs floor_area (0.913):</strong> Considerar eliminar una de estas variables
+                    </li>
+                    <li><strong>bathrooms vs floor_built (0.804):</strong> Evaluar si aportan información única</li>
+                    <li><strong>lng vs postalcode (-0.587):</strong> Correlación geográfica natural pero alta</li>
+                </ul>
+                <p><strong>Impacto:</strong> La multicolinealidad puede afectar la estabilidad de algunos algoritmos y
+                    la interpretabilidad del modelo.</p>
+            </div>
+
+            <div class="alert alert-success">
+                <h3>Variables con Baja Correlación - Candidatas a Eliminación</h3>
+                <ul>
+                    <li><strong>garden_area:</strong> 0.0 con web_id - Sin correlación significativa</li>
+                    <li><strong>furnished, equipped_kitchen:</strong> ~0.03 - Muy bajo impacto</li>
+                    <li><strong>second_hand:</strong> 0.035 - Aporte mínimo al modelo</li>
+                    <li><strong>orientation:</strong> 0.081 - Correlación muy baja</li>
+                </ul>
+            </div>
+
+            <div class="highlight-box">
+                <h3>Hallazgos Clave para Feature Engineering</h3>
+                <ul>
+                    <li><strong>Superficie es el predictor más importante:</strong> Correlación 0.728 con precio</li>
+                    <li><strong>Variables geográficas relevantes:</strong> lat/lng muestran correlaciones moderadas</li>
+                    <li><strong>Equipamiento premium:</strong> air_conditioning, balcony tienen correlación positiva con
+                        precio
+                    </li>
+                    <li><strong>Estructura física:</strong> bedrooms/bathrooms muy correlacionados - considerar ratio
+                        beds/baths
+                    </li>
+                    <li><strong>Información temporal:</strong> year_built relacionado con múltiples características
+                        modernas
+                    </li>
+                </ul>
+            </div>
+
+            <h3 id="seccion-2-5">2.5. Informe de BIAS</h3>
+            <p>Se realizó un análisis exhaustivo de sesgo utilizando SageMaker Clarify para evaluar la equidad del
+                modelo en la predicción de precios de alquiler. El análisis se centró en el distrito como atributo
+                sensible, estableciendo un umbral de 1200€ para clasificar viviendas como "asequibles" vs "no
+                asequibles".</p>
+
+            <div class="alert alert-info">
+                <h3>Metodología del Análisis de Sesgo</h3>
+                <p><strong>Configuración utilizada:</strong></p>
+                <ul>
+                    <li><strong>Variable objetivo:</strong> price (precio de alquiler)</li>
+                    <li><strong>Atributo sensible:</strong> district (distrito)</li>
+                    <li><strong>Umbral de decisión:</strong> 1200€ (asequible ≤ 1200€, no asequible > 1200€)</li>
+                    <li><strong>Métricas evaluadas:</strong> Class Imbalance (CI), Difference in Positive Proportions in
+                        Labels (DPL), Jensen-Shannon Divergence (JS)
+                    </li>
+                </ul>
+            </div>
+
+            <h4>Resultados por Distrito Analizado</h4>
+            <p>Se analizaron 6 distritos representativos de Madrid, comparando cada uno contra el resto del dataset:</p>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Distrito</th>
+                        <th>Class Imbalance (CI)</th>
+                        <th>DPL</th>
+                        <th>Jensen-Shannon (JS)</th>
+                        <th>Nivel de Sesgo</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Centro</td>
+                        <td>0.72</td>
+                        <td>-0.12</td>
+                        <td>0.0076</td>
+                        <td>🟡 Moderado</td>
+                    </tr>
+                    <tr>
+                        <td>Tetuán</td>
+                        <td>0.87</td>
+                        <td>0.022</td>
+                        <td>0.00024</td>
+                        <td>🟢 Bajo</td>
+                    </tr>
+                    <tr>
+                        <td>Usera</td>
+                        <td>0.98</td>
+                        <td>0.56</td>
+                        <td>0.2</td>
+                        <td>🔴 Alto</td>
+                    </tr>
+                    <tr>
+                        <td>Salamanca</td>
+                        <td>0.76</td>
+                        <td>-0.29</td>
+                        <td>0.054</td>
+                        <td>🔴 Alto</td>
+                    </tr>
+                    <tr>
+                        <td>Carabanchel</td>
+                        <td>0.96</td>
+                        <td>0.55</td>
+                        <td>0.19</td>
+                        <td>🔴 Alto</td>
+                    </tr>
+                    <tr>
+                        <td>Chamartín</td>
+                        <td>0.84</td>
+                        <td>-0.19</td>
+                        <td>0.021</td>
+                        <td>🟡 Moderado</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="alert alert-warning">
+                <h3>Interpretación de las Métricas</h3>
+                <p><strong>Class Imbalance (CI):</strong></p>
+                <ul>
+                    <li>Valores cercanos a 1.0: Equilibrio entre clases (asequible/no asequible)</li>
+                    <li>Valores alejados de 1.0: Desbalance significativo</li>
+                </ul>
+                <p><strong>Difference in Positive Proportions in Labels (DPL):</strong></p>
+                <ul>
+                    <li>Valores cercanos a 0: Sin sesgo en la distribución de etiquetas</li>
+                    <li>Valores positivos altos: Sobrerepresentación de casos "asequibles"</li>
+                    <li>Valores negativos: Sobrerepresentación de casos "no asequibles"</li>
+                </ul>
+                <p><strong>Jensen-Shannon Divergence (JS):</strong></p>
+                <ul>
+                    <li>Valores cercanos a 0: Distribuciones similares entre grupos</li>
+                    <li>Valores altos: Divergencia significativa en distribuciones</li>
+                </ul>
+            </div>
+
+            <div class="highlight-box">
+                <h3>Hallazgos Principales del Análisis de Sesgo</h3>
+                <p><strong>🔴 DISTRITOS CON SESGO ALTO:</strong></p>
+                <ul>
+                    <li><strong>Usera (DPL: 0.56, JS: 0.2):</strong> Fuerte sesgo hacia viviendas asequibles - área
+                        tradicionalmente de rentas bajas
+                    </li>
+                    <li><strong>Salamanca (DPL: -0.29, JS: 0.054):</strong> Sesgo hacia viviendas no asequibles - zona
+                        premium de Madrid
+                    </li>
+                    <li><strong>Carabanchel (DPL: 0.55, JS: 0.19):</strong> Sesgo hacia asequibles - distrito de clase
+                        trabajadora
+                    </li>
+                </ul>
+
+                <p><strong>🟡 DISTRITOS CON SESGO MODERADO:</strong></p>
+                <ul>
+                    <li><strong>Centro (DPL: -0.12, JS: 0.0076):</strong> Ligero sesgo hacia no asequibles - zona
+                        turística y comercial
+                    </li>
+                    <li><strong>Chamartín (DPL: -0.19, JS: 0.021):</strong> Sesgo moderado hacia no asequibles - zona
+                        empresarial
+                    </li>
+                </ul>
+
+                <p><strong>🟢 DISTRITOS CON SESGO BAJO:</strong></p>
+                <ul>
+                    <li><strong>Tetuán (DPL: 0.022, JS: 0.00024):</strong> Distribución más equilibrada - zona mixta en
+                        transición
+                    </li>
+                </ul>
+            </div>
+
+            <div class="alert alert-danger">
+                <h3>Implicaciones del Sesgo Detectado</h3>
+                <p><strong>Problemática identificada:</strong></p>
+                <ul>
+                    <li>El modelo refleja sesgos socioeconómicos inherentes al mercado inmobiliario madrileño</li>
+                    <li>Distritos tradicionalmente caros (Salamanca, Chamartín) muestran sesgo hacia predicciones de
+                        altos precios
+                    </li>
+                    <li>Distritos de rentas bajas (Usera, Carabanchel) muestran sesgo hacia predicciones de precios
+                        asequibles
+                    </li>
+                    <li>Esto puede perpetuar desigualdades existentes en lugar de proporcionar valoraciones objetivas
+                    </li>
+                </ul>
+            </div>
+
+            <div class="alert alert-success">
+                <h3>Recomendaciones para Mitigación de Sesgo</h3>
+                <ul>
+                    <li><strong>Estratificación por distrito:</strong> Entrenar modelos específicos o aplicar pesos
+                        balanceados
+                    </li>
+                    <li><strong>Feature engineering contextual:</strong> Incorporar variables socioeconómicas
+                        normalizadas
+                    </li>
+                    <li><strong>Post-processing:</strong> Aplicar correcciones algorítmicas para equilibrar predicciones
+                    </li>
+                    <li><strong>Monitorización continua:</strong> Tracking de métricas de equidad en producción</li>
+                    <li><strong>Transparencia:</strong> Documentar limitaciones y sesgos conocidos para usuarios finales
+                    </li>
+                </ul>
+            </div>
+
+            <div class="image-container">
+                <img src="images/bias-report-center.webp" alt="Análisis de sesgo - Distrito Centro"
+                     class="clickable-image">
+                <p class="image-caption">Figura 4a: Análisis de sesgo para el distrito Centro (CI: 0.72, DPL: -0.12)</p>
+            </div>
+
+            <div class="image-container">
+                <img src="images/bias-report-tetuan.webp" alt="Análisis de sesgo - Distrito Tetuán"
+                     class="clickable-image">
+                <p class="image-caption">Figura 4b: Análisis de sesgo para el distrito Tetuán (CI: 0.87, DPL: 0.022)</p>
+            </div>
+
+            <div class="image-container">
+                <img src="images/bias-report-usera.webp" alt="Análisis de sesgo - Distrito Usera"
+                     class="clickable-image">
+                <p class="image-caption">Figura 4c: Análisis de sesgo para el distrito Usera (CI: 0.98, DPL: 0.56)</p>
+            </div>
+
+            <div class="image-container">
+                <img src="images/bias-report-salamanca.webp" alt="Análisis de sesgo - Distrito Salamanca"
+                     class="clickable-image">
+                <p class="image-caption">Figura 4d: Análisis de sesgo para el distrito Salamanca (CI: 0.76, DPL:
+                    -0.29)</p>
+            </div>
+
+            <div class="image-container">
+                <img src="images/bias-report-carabanchel.webp" alt="Análisis de sesgo - Distrito Carabanchel"
+                     class="clickable-image">
+                <p class="image-caption">Figura 4e: Análisis de sesgo para el distrito Carabanchel (CI: 0.96, DPL:
+                    0.55)</p>
+            </div>
+
+            <div class="image-container">
+                <img src="images/bias-report-chamartin.webp" alt="Análisis de sesgo - Distrito Chamartín"
+                     class="clickable-image">
+                <p class="image-caption">Figura 4f: Análisis de sesgo para el distrito Chamartín (CI: 0.84, DPL:
+                    -0.19)</p>
+            </div>
+
+            <h3 id="seccion-2-6">2.6. Informe de Quick Model</h3>
+            <p>SageMaker Canvas generó automáticamente un modelo baseline para evaluar la viabilidad inicial del
+                problema de predicción de precios. Este Quick Model proporciona una línea base de rendimiento y valida
+                que el dataset tiene suficiente información predictiva.</p>
+
+            <div class="alert alert-info">
+                <h3>Configuración del Quick Model</h3>
+                <p><strong>Detalles del modelo generado:</strong></p>
+                <ul>
+                    <li><strong>Dataset:</strong> madrid_rent_20250614_010109</li>
+                    <li><strong>Total de columnas:</strong> 33 variables</li>
+                    <li><strong>Total de filas:</strong> 9,229 registros</li>
+                    <li><strong>Total de celdas:</strong> 304,557</li>
+                    <li><strong>Variable objetivo:</strong> price (predicción numérica)</li>
+                    <li><strong>Tipo de modelo:</strong> Quick build (construcción rápida)</li>
+                </ul>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Métrica</th>
+                        <th>Valor</th>
+                        <th>Interpretación</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>RMSE</td>
+                        <td>767.404€</td>
+                        <td>Error cuadrático medio - Desviación típica del error</td>
+                    </tr>
+                    <tr>
+                        <td>MSE</td>
+                        <td>588,908.438</td>
+                        <td>Error cuadrático medio sin raíz</td>
+                    </tr>
+                    <tr>
+                        <td>MAE</td>
+                        <td>334.246€</td>
+                        <td>Error absoluto medio - Error promedio esperado</td>
+                    </tr>
+                    <tr>
+                        <td>R²</td>
+                        <td>0.791 (79.112%)</td>
+                        <td>Varianza explicada por el modelo</td>
+                    </tr>
+                    <tr>
+                        <td>MAPE</td>
+                        <td>No disponible</td>
+                        <td>Error porcentual absoluto medio</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="highlight-box">
+                <h3>Análisis de Resultados del Quick Model</h3>
+                <p><strong>🟢 RESULTADOS PROMETEDORES:</strong></p>
+                <ul>
+                    <li><strong>R² = 79.1%:</strong> El modelo explica casi el 80% de la variabilidad en los precios,
+                        indicando alta capacidad predictiva
+                    </li>
+                    <li><strong>MAE = 334€:</strong> Error promedio de 334€ por predicción, relativamente bajo para el
+                        rango de precios
+                    </li>
+                    <li><strong>Predicción típica:</strong> ±767€ del valor real (RMSE), aceptable para primera
+                        iteración
+                    </li>
+                </ul>
+
+                <p><strong>🎯 COMPARACIÓN CON OBJETIVOS:</strong></p>
+                <ul>
+                    <li><strong>MAE objetivo (≤400€):</strong> ✅ 334€ - Ya cumple el objetivo</li>
+                    <li><strong>R² objetivo (≥0.75):</strong> ✅ 0.791 - Supera el objetivo</li>
+                    <li><strong>RMSE objetivo (≤600€):</strong> ⚠️ 767€ - Requiere optimización</li>
+                </ul>
+            </div>
+
+            <div class="alert alert-success">
+                <h3>Conclusiones del Quick Model</h3>
+                <ul>
+                    <li><strong>Viabilidad confirmada:</strong> El dataset tiene suficiente información para predecir
+                        precios con alta precisión
+                    </li>
+                    <li><strong>Baseline sólido:</strong> R² del 79% demuestra que las variables seleccionadas son
+                        altamente predictivas
+                    </li>
+                    <li><strong>Margen de mejora:</strong> Con optimización adicional se puede mejorar el RMSE para
+                        cumplir todos los objetivos
+                    </li>
+                    <li><strong>Preparado para Autopilot:</strong> Los resultados justifican proceder con el
+                        entrenamiento completo
+                    </li>
+                </ul>
+            </div>
+
+            <div class="alert alert-warning">
+                <strong>Nota sobre metodología:</strong> El Quick Model utiliza algoritmos de machine learning
+                automatizados para generar rápidamente un baseline. Los resultados sirven como validación inicial y
+                punto de partida para el desarrollo del modelo final con SageMaker Autopilot.
+            </div>
+
+            <div class="image-container">
+                <img src="images/quick-model.webp" alt="Resultados del Quick Model en SageMaker Canvas"
+                     class="clickable-image">
+                <p class="image-caption">Figura 5: Dashboard de métricas del Quick Model en SageMaker Canvas</p>
+            </div>
+
+        </section>
+
+        <section class="section" id="seccion-3">
+            <h2>3. Ingeniería de Características</h2>
+
+            <p>Se implementó un pipeline completo de transformación de datos utilizando SageMaker Data Wrangler,
+                aplicando técnicas de feature engineering para optimizar el dataset para el entrenamiento con
+                Autopilot.</p>
+
+            <div class="image-container">
+                <img src="images/data-wrangler-flow.webp" alt="Pipeline de transformación en Data Wrangler"
+                     class="clickable-image">
+                <p class="image-caption">Figura 7: Pipeline completo de transformación de datos en SageMaker Data
+                    Wrangler</p>
+            </div>
+
+            <h3 id="seccion-3-1">3.1. Transformaciones Implementadas</h3>
+            <p>Se aplicaron las siguientes transformaciones secuenciales para preparar los datos:</p>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Paso</th>
+                        <th>Transformación</th>
+                        <th>Descripción</th>
+                        <th>Justificación</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Custom Formula - Distancia al Centro</td>
+                        <td>Creación de columna distance_to_center usando fórmula de Haversine</td>
+                        <td>Variable geográfica relevante para el precio</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Drop Columns</td>
+                        <td>Eliminación de 12 columnas no relevantes</td>
+                        <td>Reduce dimensionalidad y ruido</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Custom Formula - Imputación</td>
+                        <td>Creación de floor_area_estimate para valores faltantes usando metros totales</td>
+                        <td>Preserva información de variable altamente correlacionada</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Drop Column - floor_area</td>
+                        <td>Eliminación de columna original</td>
+                        <td>Evita duplicación tras imputación</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>Drop Missing</td>
+                        <td>Eliminación de filas con valores faltantes</td>
+                        <td>Garantiza calidad final del dataset</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h4>Detalle de Transformaciones Aplicadas</h4>
+
+            <div class="highlight-box">
+                <h3>1. Creación de Variable de Distancia al Centro</h3>
+                <p><strong>Fórmula utilizada (Haversine):</strong></p>
+                <div class="code-block">
+                    6371 * acos(
+                    cos(radians(40.416775)) * cos(radians(lat)) *
+                    cos(radians(lng) - radians(-3.703790)) +
+                    sin(radians(40.416775)) * sin(radians(lat))
+                    )
+                </div>
+                <ul>
+                    <li><strong>Coordenadas de referencia:</strong> Puerta del Sol (40.416775, -3.703790)</li>
+                    <li><strong>Resultado:</strong> Distancia en kilómetros desde el centro de Madrid</li>
+                    <li><strong>Beneficio:</strong> Captura el efecto de la ubicación en el precio de manera
+                        cuantitativa
+                    </li>
+                </ul>
+            </div>
+
+            <div class="alert alert-warning">
+                <h3>2. Eliminación de Columnas No Relevantes</h3>
+                <p><strong>Columnas eliminadas:</strong> deposit, lat, lng, postalcode, year_built, web_id, last_update,
+                    orientation, professional_name, subdistrict, title, url</p>
+                <ul>
+                    <li><strong>Variables de metadatos:</strong> web_id, title, url, last_update, professional_name</li>
+                    <li><strong>Variables geográficas redundantes:</strong> lat, lng (ya procesadas en
+                        distance_to_center), postalcode, subdistrict
+                    </li>
+                    <li><strong>Variables con baja correlación:</strong> deposit, year_built, orientation (según
+                        análisis previo)
+                    </li>
+                </ul>
+            </div>
+
+            <div class="alert alert-success">
+                <h3>3. Imputación Inteligente de Superficie</h3>
+                <p><strong>Estrategia de imputación:</strong></p>
+                <div class="code-block">
+                    CASE WHEN floor_area IS NULL
+                    THEN floor_built * 0.75
+                    ELSE floor_area END
+                </div>
+                <ul>
+                    <li><strong>Lógica:</strong> Estima superficie útil basándose en superficie total construida</li>
+                    <li><strong>Factor 0.75:</strong> Relación empírica entre metros construidos y metros útiles</li>
+                    <li><strong>Preservación de datos:</strong> Mantiene valores originales cuando están disponibles
+                    </li>
+                    <li><strong>Diferencia clave:</strong> floor_built = metros totales construidos, floor_area = metros
+                        útiles
+                    </li>
+                </ul>
+            </div>
+
+            <h3 id="seccion-3-2">3.2. Dataset Final Limpio</h3>
+            <p>Tras aplicar todas las transformaciones, se generó el dataset limpio
+                <strong>madrid_rent_cleaned.csv</strong> con las siguientes características:</p>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Variable</th>
+                        <th>Tipo</th>
+                        <th>Descripción</th>
+                        <th>Ejemplo</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>price</td>
+                        <td>Numérica</td>
+                        <td>Precio de alquiler mensual (€)</td>
+                        <td>1200</td>
+                    </tr>
+                    <tr>
+                        <td>type</td>
+                        <td>Categórica</td>
+                        <td>Tipo de vivienda</td>
+                        <td>Piso, Ático, Estudio</td>
+                    </tr>
+                    <tr>
+                        <td>floor_area_estimate</td>
+                        <td>Numérica</td>
+                        <td>Superficie estimada (m²)</td>
+                        <td>85.5</td>
+                    </tr>
+                    <tr>
+                        <td>bedrooms</td>
+                        <td>Numérica</td>
+                        <td>Número de habitaciones</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td>bathrooms</td>
+                        <td>Numérica</td>
+                        <td>Número de baños</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td>floor</td>
+                        <td>Numérica</td>
+                        <td>Planta del inmueble</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td>floor_built</td>
+                        <td>Numérica</td>
+                        <td>Superficie total construida (m²)</td>
+                        <td>120.5</td>
+                    </tr>
+                    <tr>
+                        <td>location</td>
+                        <td>Categórica</td>
+                        <td>Barrio específico</td>
+                        <td>Malasaña, Chueca</td>
+                    </tr>
+                    <tr>
+                        <td>district</td>
+                        <td>Categórica</td>
+                        <td>Distrito de Madrid</td>
+                        <td>Centro, Salamanca</td>
+                    </tr>
+                    <tr>
+                        <td>private_owner</td>
+                        <td>Booleana</td>
+                        <td>Propiedad de particular</td>
+                        <td>True/False</td>
+                    </tr>
+                    <tr>
+                        <td>lift</td>
+                        <td>Booleana</td>
+                        <td>Dispone de ascensor</td>
+                        <td>True/False</td>
+                    </tr>
+                    <tr>
+                        <td>garage_included</td>
+                        <td>Booleana</td>
+                        <td>Incluye plaza de garaje</td>
+                        <td>True/False</td>
+                    </tr>
+                    <tr>
+                        <td>furnished</td>
+                        <td>Booleana</td>
+                        <td>Vivienda amueblada</td>
+                        <td>True/False</td>
+                    </tr>
+                    <tr>
+                        <td>equipped_kitchen</td>
+                        <td>Booleana</td>
+                        <td>Cocina equipada</td>
+                        <td>True/False</td>
+                    </tr>
+                    <tr>
+                        <td>air_conditioning</td>
+                        <td>Booleana</td>
+                        <td>Aire acondicionado</td>
+                        <td>True/False</td>
+                    </tr>
+                    <tr>
+                        <td>swimming_pool</td>
+                        <td>Booleana</td>
+                        <td>Acceso a piscina</td>
+                        <td>True/False</td>
+                    </tr>
+                    <tr>
+                        <td>distance_to_center</td>
+                        <td>Numérica</td>
+                        <td>Distancia al centro (km)</td>
+                        <td>3.2</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 id="seccion-3-3">3.3. Preparación para Autopilot</h3>
+            <p>El dataset transformado está optimizado para SageMaker Autopilot, que se encarga automáticamente del
+                procesamiento adicional necesario:</p>
+
+            <div class="highlight-box">
+                <h3>Procesamiento Automático en Autopilot</h3>
+                <p><strong>SageMaker Autopilot maneja automáticamente:</strong></p>
+                <ul>
+                    <li><strong>Codificación de variables categóricas:</strong> Autopilot identifica automáticamente las
+                        variables categóricas y aplica las técnicas de encoding más adecuadas (one-hot encoding, target
+                        encoding, etc.) según el contexto del problema
+                    </li>
+                    <li><strong>Normalización de datos:</strong> Escalado automático de variables numéricas según el
+                        algoritmo seleccionado
+                    </li>
+                    <li><strong>Selección de características:</strong> Evaluación automática de la importancia de las
+                        características y selección óptima
+                    </li>
+                    <li><strong>División train/test:</strong> Creación automática de splits de entrenamiento y
+                        validación sin intervención manual
+                    </li>
+                    <li><strong>Detección de tipo de problema:</strong> Identificación automática del tipo de problema
+                        (regresión) basándose en la variable objetivo
+                    </li>
+                </ul>
+            </div>
+
+            <div class="alert alert-info">
+                <strong>Ventaja de Autopilot:</strong> SageMaker Autopilot se encarga del preprocesamiento de datos
+                automáticamente. No es necesario realizar técnicas convencionales de preprocesamiento como el manejo de
+                valores faltantes, conversión de características categóricas a numéricas, escalado de datos, y manejo de
+                tipos de datos más complicados.
+            </div>
+
+            <div class="alert alert-success">
+                <strong>Dataset Listo:</strong> El conjunto de datos madrid_rent_cleaned.csv está optimizado y listo
+                para ser procesado por SageMaker Autopilot, que aplicará automáticamente todas las transformaciones
+                adicionales necesarias según los algoritmos seleccionados.
+            </div>
+        </section>
+
+        <section class="section" id="seccion-4">
+            <h2>4. Entrenamiento del Modelo en AWS SageMaker</h2>
+
+            <p>Se realizó el entrenamiento del modelo utilizando SageMaker Canvas con el método Standard Build, que
+                ofrece ventajas significativas sobre Quick Build: mayor precisión (Standard Build prioriza la exactitud
+                sobre la velocidad), capacidad de procesamiento de datasets grandes (sin límite de 50.000 registros como
+                Quick Build), tiempo de entrenamiento más exhaustivo (2-5 horas vs 2-30 minutos), y funcionalidades
+                avanzadas como el Model Leaderboard que permite comparar múltiples candidatos de modelo con métricas
+                detalladas. Esta modalidad también permite configuraciones avanzadas como la selección de métodos de
+                entrenamiento (ensemble o hyperparameter optimization), elección de algoritmos específicos, y
+                personalización de la división de datos training/validation.</p>
+
+            <h3 id="seccion-4-1">4.1. Configuración del Entrenamiento</h3>
+            <p>Se configuró SageMaker Canvas con los siguientes parámetros para optimizar el entrenamiento:</p>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Parámetro</th>
+                        <th>Configuración</th>
+                        <th>Justificación</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Tipo de Modelo</td>
+                        <td>Numeric model type (Regresión)</td>
+                        <td>Predicción de valores continuos de precio</td>
+                    </tr>
+                    <tr>
+                        <td>Método de Entrenamiento</td>
+                        <td>Auto (Recomendado)</td>
+                        <td>Selección automática de algoritmos más relevantes</td>
+                    </tr>
+                    <tr>
+                        <td>Métrica Objetivo</td>
+                        <td>MSE (Mean Squared Error) - Default</td>
+                        <td>Seleccionada debido a la presencia de outliers en el dataset por viviendas de lujo con
+                            precios muy elevados. MSE penaliza cuadráticamente los errores grandes, evitando que el
+                            modelo se sesgue hacia precios medios e ignore las propiedades de alto valor, garantizando
+                            precisión en todo el espectro del mercado
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>División de Datos</td>
+                        <td>80% Training / 20% Validation</td>
+                        <td>División estándar para evaluación</td>
+                    </tr>
+                    <tr>
+                        <td>Máximo de Candidatos</td>
+                        <td>100 modelos</td>
+                        <td>Exploración exhaustiva del espacio de soluciones</td>
+                    </tr>
+                    <tr>
+                        <td>Tiempo Máximo</td>
+                        <td>Por defecto (Standard Build)</td>
+                        <td>Sin tiempo máximo para un entrenamiento íntegro</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="image-container">
+                <img src="images/sagemaker-canvas-config-model-type.webp" alt="Configuración del tipo de modelo"
+                     class="clickable-image">
+                <p class="image-caption">Figura 8a: Configuración del tipo de modelo - Numeric model (Regresión)</p>
+            </div>
+
+            <div class="image-container">
+                <img src="images/sagemaker-canvas-config-training-method.webp"
+                     alt="Configuración del método de entrenamiento" class="clickable-image">
+                <p class="image-caption">Figura 8b: Configuración del método de entrenamiento - Auto (Recomendado)</p>
+            </div>
+
+            <div class="image-container">
+                <img src="images/sagemaker-canvas-config-objective-metric.webp" alt="Configuración de métrica objetivo"
+                     class="clickable-image">
+                <p class="image-caption">Figura 8c: Configuración de métrica objetivo - MSE (Mean Squared Error) como
+                    default</p>
+            </div>
+
+            <div class="image-container">
+                <img src="images/sagemaker-canvas-config-data-split.webp" alt="Configuración de división de datos"
+                     class="clickable-image">
+                <p class="image-caption">Figura 8d: Configuración de división de datos - 80% Training / 20%
+                    Validation</p>
+            </div>
+
+            <div class="image-container">
+                <img src="images/sagemaker-canvas-config-max-candidates.webp" alt="Configuración de candidatos máximos"
+                     class="clickable-image">
+                <p class="image-caption">Figura 8e: Configuración de candidatos máximos - 100 modelos y tiempo de
+                    ejecución</p>
+            </div>
+
+            <h3 id="seccion-4-2">4.2. Evaluación de Métodos de Entrenamiento</h3>
+            <p>Se evaluaron diferentes enfoques de entrenamiento para determinar el más adecuado:</p>
+
+            <div class="highlight-box">
+                <h3>Comparación de Métodos de Entrenamiento</h3>
+                <p><strong>1. Auto (Método Seleccionado) ✅</strong></p>
+                <ul>
+                    <li><strong>Ventajas:</strong> Selección automática de algoritmos más relevantes para el dataset
+                    </li>
+                    <li><strong>Resultado:</strong> Exploración amplia del espacio de algoritmos sin sesgos predefinidos
+                    </li>
+                    <li><strong>Optimización:</strong> Ajuste automático de hiperparámetros para múltiples algoritmos
+                    </li>
+                </ul>
+
+                <p><strong>2. Hyperparameter Optimization (Evaluado Previamente) ⚠️</strong></p>
+                <ul>
+                    <li><strong>Configuración:</strong> Limitado a XGBoost y Multilayer Perceptron</li>
+                    <li><strong>Resultado:</strong> Rendimiento inferior al método Auto</li>
+                    <li><strong>Limitación:</strong> Restricción a solo dos tipos de algoritmos</li>
+                </ul>
+
+                <p><strong>3. Ensemble (No seleccionado)</strong></p>
+                <ul>
+                    <li><strong>Consideración:</strong> Mayor complejidad y tiempo de entrenamiento</li>
+                    <li><strong>Decisión:</strong> Auto proporcionó resultados suficientemente buenos</li>
+                </ul>
+            </div>
+
+            <div class="alert alert-warning">
+                <h3>Justificación de la Selección del Método Auto</h3>
+                <p>En pruebas preliminares, el método de Hyperparameter Optimization con XGBoost y Multilayer Perceptron
+                    mostró limitaciones significativas:</p>
+                <ul>
+                    <li><strong>XGBoost:</strong> Aunque es excelente para muchos problemas tabulares, en este dataset
+                        específico no logró capturar adecuadamente los patrones complejos de precios de alquiler
+                    </li>
+                    <li><strong>Multilayer Perceptron:</strong> Requirió más tiempo de entrenamiento sin proporcionar
+                        mejoras significativas en precisión
+                    </li>
+                    <li><strong>Limitación del enfoque:</strong> Restringir la búsqueda a solo dos algoritmos impidió
+                        explorar otras opciones más adecuadas para el problema
+                    </li>
+                    <li><strong>Resultado:</strong> El método Auto, al evaluar una gama más amplia de algoritmos,
+                        encontró combinaciones más efectivas para este caso de uso específico
+                    </li>
+                </ul>
+            </div>
+
+            <h3 id="seccion-4-3">4.3. Resultados del Entrenamiento</h3>
+            <p>El modelo entrenado con el método Auto mostró un rendimiento excepcional, superando significativamente
+                los objetivos establecidos:</p>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Métrica</th>
+                        <th>Valor Obtenido</th>
+                        <th>Objetivo Inicial</th>
+                        <th>Estado</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>RMSE</td>
+                        <td>554.022€</td>
+                        <td>≤ 600€</td>
+                        <td>✅ Cumplido (7.7% mejor)</td>
+                    </tr>
+                    <tr>
+                        <td>MAE</td>
+                        <td>298.922€</td>
+                        <td>≤ 400€</td>
+                        <td>✅ Superado (25.3% mejor)</td>
+                    </tr>
+                    <tr>
+                        <td>R²</td>
+                        <td>85.352%</td>
+                        <td>≥ 75%</td>
+                        <td>✅ Superado (13.8% mejor)</td>
+                    </tr>
+                    <tr>
+                        <td>MSE</td>
+                        <td>306,940.656</td>
+                        <td>-</td>
+                        <td>✅ Optimizado</td>
+                    </tr>
+                    <tr>
+                        <td>Latencia de Inferencia</td>
+                        <td>1.046 segundos</td>
+                        <td>≤ 2 segundos</td>
+                        <td>✅ Cumplido (47.7% mejor)</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="image-container">
+                <img src="images/sagemaker-canvas-final-model-metrics.webp" alt="Métricas del modelo final"
+                     class="clickable-image">
+                <p class="image-caption">Figura 9: Métricas de rendimiento del modelo final entrenado</p>
+            </div>
+
+            <h3 id="seccion-4-4">4.4. Análisis de Candidatos de Modelo</h3>
+            <p>SageMaker Canvas evaluó múltiples candidatos de modelo, generando un ranking basado en las métricas de
+                rendimiento:</p>
+
+            <div class="image-container">
+                <img src="images/sagemaker-canvas-model-leaderboard.webp" alt="Ranking de modelos candidatos"
+                     class="clickable-image">
+                <p class="image-caption">Figura 10: Model Leaderboard - Ranking de los mejores candidatos de modelo</p>
+            </div>
+
+            <div class="alert alert-success">
+                <h3>Destacados del Modelo Seleccionado</h3>
+                <ul>
+                    <li><strong>Modelo ganador:</strong> Identificado como "Default model" en el leaderboard</li>
+                    <li><strong>MSE optimizada:</strong> 306,940.656 (métrica de optimización utilizada)</li>
+                    <li><strong>Consistencia:</strong> Múltiples candidatos con rendimiento similar, indicando robustez
+                    </li>
+                    <li><strong>Eficiencia:</strong> Latencia de inferencia de solo 1.046 segundos</li>
+                    <li><strong>Dataset procesado:</strong> 8,908 filas y 22 columnas
+                        (madrid_rent_cleaned_20250613_120624)
+                    </li>
+                </ul>
+            </div>
+
+            <div class="highlight-box">
+                <h3>Logros Clave del Entrenamiento</h3>
+                <ul>
+                    <li><strong>Superación de objetivos:</strong> Todas las métricas clave superaron los objetivos
+                        establecidos
+                    </li>
+                    <li><strong>Precisión destacada:</strong> MAE de 298€ significa un error promedio menor a 300€ por
+                        predicción
+                    </li>
+                    <li><strong>Capacidad explicativa:</strong> R² del 85.35% indica que el modelo explica más del 85%
+                        de la variabilidad en precios
+                    </li>
+                    <li><strong>Robustez:</strong> RMSE de 554€ muestra control efectivo de predicciones extremas</li>
+                    <li><strong>Escalabilidad:</strong> Tiempo de inferencia óptimo para aplicaciones en tiempo real
+                    </li>
+                </ul>
+            </div>
+
+            <div class="alert alert-info">
+                <strong>Ventaja del Método Auto:</strong> La selección automática de algoritmos permitió a SageMaker
+                Canvas identificar y optimizar el modelo más adecuado para las características específicas del dataset
+                de alquileres de Madrid, superando las limitaciones de enfoques más restrictivos.
+            </div>
+        </section>
+
+        <section class="section" id="seccion-5">
+            <h2>5. Evaluación y Registro del Modelo</h2>
+
+            <h3 id="seccion-5-1">5.1. Análisis de Sesgo con SageMaker Clarify</h3>
+            <p>SageMaker Clarify es la herramienta de AWS diseñada para detectar sesgo en modelos de machine learning y
+                proporcionar explicabilidad de las predicciones. Esta herramienta es esencial para garantizar que los
+                modelos sean justos y no discriminen contra grupos específicos.</p>
+
+            <div class="alert alert-warning">
+                <strong>Pendiente de Realización:</strong> Debido a las restricciones presupuestarias del entorno de
+                laboratorio ($50 de créditos AWS), el análisis de sesgo con SageMaker Clarify no ha sido realizado aún.
+                Clarify requiere la creación de shadow endpoints que consumen recursos significativos para generar
+                explicaciones detalladas del modelo.
+            </div>
+
+            <div class="alert alert-info">
+                <h3>Capacidades de SageMaker Clarify</h3>
+                <p><strong>Análisis que Clarify proporcionará:</strong></p>
+                <ul>
+                    <li><strong>Detección de sesgo pre-training:</strong> Análisis de desequilibrios en el dataset antes
+                        del entrenamiento
+                    </li>
+                    <li><strong>Detección de sesgo post-training:</strong> Evaluación del sesgo en las predicciones del
+                        modelo entrenado
+                    </li>
+                    <li><strong>Explicabilidad SHAP:</strong> Values para entender la contribución de cada
+                        característica
+                    </li>
+                    <li><strong>Métricas de equidad:</strong> Difference in Positive Proportions (DPL), True Positive
+                        Rate (TPR), False Positive Rate (FPR)
+                    </li>
+                    <li><strong>Reportes automáticos:</strong> Documentación completa de sesgo y explicabilidad</li>
+                </ul>
+            </div>
+
+            <div class="alert alert-success">
+                <strong>Consideración para Producción:</strong> En un entorno de producción, SageMaker Clarify será
+                implementado para monitorización continua de sesgo y explicabilidad, especialmente importante en
+                aplicaciones de valoración inmobiliaria que pueden impactar decisiones financieras.
+            </div>
+
+            <h3 id="seccion-5-2">5.2. Registro en Model Registry</h3>
+            <p>El modelo entrenado fue exitosamente registrado en SageMaker Model Registry, proporcionando capacidades
+                de versionado, catalogación y gestión del ciclo de vida del modelo para uso en producción.</p>
+
+            <div class="image-container">
+                <img src="images/sagemaker-model-registry-dialog.webp" alt="Diálogo de registro en Model Registry"
+                     class="clickable-image">
+                <p class="image-caption">Figura 11: Diálogo de registro del modelo en SageMaker Model Registry</p>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Parámetro</th>
+                        <th>Valor</th>
+                        <th>Descripción</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Versión Seleccionada</td>
+                        <td>V1</td>
+                        <td>Primera versión del modelo</td>
+                    </tr>
+                    <tr>
+                        <td>Fecha de Creación</td>
+                        <td>Jun 13, 2025 3:40 PM</td>
+                        <td>Timestamp de entrenamiento completado</td>
+                    </tr>
+                    <tr>
+                        <td>Grupo del Modelo</td>
+                        <td>canvas-autopilot-price-model-20250613-120624</td>
+                        <td>Identificador único del grupo de modelos</td>
+                    </tr>
+                    <tr>
+                        <td>Estado</td>
+                        <td>Ready ✅</td>
+                        <td>Modelo listo para despliegue y uso</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="highlight-box">
+                <h3>Beneficios del Model Registry</h3>
+                <ul>
+                    <li><strong>Versionado:</strong> Control de versiones automático para seguimiento de mejoras del
+                        modelo
+                    </li>
+                    <li><strong>Catalogación:</strong> Organización centralizada de modelos para equipos de data science
+                    </li>
+                    <li><strong>Metadatos:</strong> Almacenamiento de métricas, configuraciones y linaje del modelo</li>
+                    <li><strong>Aprobación:</strong> Workflow de aprobación para modelos antes de producción</li>
+                    <li><strong>Integración:</strong> Conexión directa con SageMaker Studio para colaboración</li>
+                    <li><strong>Despliegue:</strong> Facilita el despliegue a endpoints y batch processing</li>
+                </ul>
+            </div>
+
+            <div class="alert alert-info">
+                <strong>Integración con SageMaker Studio:</strong> El registro en Model Registry permite que data
+                scientists accedan al modelo desde SageMaker Studio para análisis adicionales, refinamiento, y
+                despliegue en diferentes entornos (desarrollo, staging, producción).
+            </div>
+        </section>
+
+        <section class="section" id="seccion-6">
+            <h2>6. Despliegue del Modelo en AWS SageMaker</h2>
+
+            <p>Esta sección cubre las diferentes modalidades de despliegue disponibles para el modelo entrenado, desde
+                procesamiento batch hasta endpoints en tiempo real para aplicaciones de producción.</p>
+
+            <h3 id="seccion-6-1">6.1. Inferencias Batch</h3>
+            <p>Las inferencias batch permiten procesar grandes volúmenes de datos de manera eficiente y económica. Esta
+                modalidad es ideal para escenarios donde no se requiere respuesta en tiempo real, como análisis masivos
+                de carteras inmobiliarias o estudios de mercado.</p>
+
+            <p>Se realizaron inferencias batch utilizando SageMaker Canvas con un dataset de prueba especialmente
+                preparado para validar el rendimiento del modelo entrenado.</p>
+
+            <h4>Preparación del Dataset de Batch Prediction</h4>
+            <p>Para realizar las inferencias batch, se creó un dataset específico a partir del dataset limpio original
+                utilizando un script personalizado en Python:</p>
+
+            <div class="alert alert-info">
+                <h3>Proceso de Creación del Dataset</h3>
+                <ul>
+                    <li><strong>Dataset origen:</strong> madrid_rent_cleaned.csv (8,908 registros)</li>
+                    <li><strong>Script personalizado:</strong> Código Python con pandas para generar dataset de batch
+                    </li>
+                    <li><strong>Archivo generado:</strong> madrid_rent_batch_sample.csv (500 registros)</li>
+                    <li><strong>Características:</strong> 22 columnas (sin la variable 'price' que es el target a
+                        predecir)
+                    </li>
+                </ul>
+            </div>
+
+            <div class="image-container">
+                <img src="images/s3-batch-sample-dataset.webp" alt="Dataset de batch sample en S3"
+                     class="clickable-image">
+                <p class="image-caption">Figura 13a: Dataset madrid_rent_batch_sample.csv almacenado en Amazon S3</p>
+            </div>
+
+            <div class="image-container">
+                <img src="images/canvas-batch-dataset-selection.webp" alt="Selección de dataset para batch prediction"
+                     class="clickable-image">
+                <p class="image-caption">Figura 13b: Selección del dataset para inferencias batch en SageMaker
+                    Canvas</p>
+            </div>
+
+            <h4>Resultados de las Inferencias Batch</h4>
+            <p>El modelo entrenado procesó exitosamente el dataset de prueba, generando predicciones para las 500
+                propiedades del archivo de muestra:</p>
+
+            <div class="image-container">
+                <img src="images/canvas-batch-predictions-results.webp" alt="Resultados de inferencias batch"
+                     class="clickable-image">
+                <p class="image-caption">Figura 13c: Resultados de las inferencias batch mostrando predicciones de
+                    precios</p>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Métrica</th>
+                        <th>Valor</th>
+                        <th>Descripción</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Propiedades procesadas</td>
+                        <td>500</td>
+                        <td>Total de registros del dataset de muestra</td>
+                    </tr>
+                    <tr>
+                        <td>Columnas de entrada</td>
+                        <td>22</td>
+                        <td>Variables predictoras (sin target 'price')</td>
+                    </tr>
+                    <tr>
+                        <td>Formato de salida</td>
+                        <td>CSV con predicciones</td>
+                        <td>Archivo descargable con precios predichos</td>
+                    </tr>
+                    <tr>
+                        <td>Rango de predicciones</td>
+                        <td>717€ - 4,560€</td>
+                        <td>Basado en muestra de resultados visibles</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="highlight-box">
+                <h3>Capacidades de Inferencias Batch Demostradas</h3>
+                <ul>
+                    <li><strong>Escalabilidad:</strong> Procesamiento eficiente de 500 propiedades simultáneamente</li>
+                    <li><strong>Precisión:</strong> Predicciones coherentes con el rango de mercado madrileño</li>
+                    <li><strong>Flexibilidad:</strong> Diferentes tipos de propiedades (Studio, Flat) procesadas
+                        correctamente
+                    </li>
+                    <li><strong>Usabilidad:</strong> Resultados exportables en formato CSV para análisis posterior</li>
+                    <li><strong>Diversidad:</strong> Propiedades con diferentes características (pisos, estudios,
+                        diversas ubicaciones)
+                    </li>
+                </ul>
+            </div>
+
+            <div class="alert alert-success">
+                <h3>Recursos del Proyecto</h3>
+                <ul>
+                    <li><strong>Código fuente:</strong> <a href="#" target="_blank">Script de generación del dataset
+                        batch (GitHub)</a></li>
+                    <li><strong>Resultados:</strong> <a href="#" target="_blank">Archivo CSV con predicciones batch
+                        (GitHub)</a></li>
+                    <li><strong>Dataset utilizado:</strong> <a href="#" target="_blank">madrid_rent_batch_sample.csv
+                        con 500 registros de prueba (GitHub)</a></li>
+                </ul>
+            </div>
+
+            <div class="alert alert-info">
+                <strong>Validación del Modelo:</strong> Las inferencias batch confirman que el modelo entrenado funciona
+                correctamente en modo de producción, generando predicciones realistas para propiedades del mercado
+                madrileño con diferentes características y ubicaciones.
+            </div>
+
+            <h3 id="seccion-6-2">6.2. Endpoint en Tiempo Real</h3>
+            <p>El despliegue como endpoint en tiempo real permite obtener predicciones instantáneas para aplicaciones
+                interactivas. Sin embargo, esta funcionalidad presenta limitaciones en el entorno de laboratorio
+                académico.</p>
+
+            <div class="alert alert-warning">
+                <strong>Limitación del Entorno Académico:</strong> Los laboratorios de AWS Academy tienen restricciones
+                que impiden el despliegue de endpoints en tiempo real. Estas limitaciones están diseñadas para controlar
+                costos y recursos en entornos educativos.
+            </div>
+
+            <div class="image-container">
+                <img src="images/sagemaker-endpoint-deployment-error.webp" alt="Error al desplegar endpoint"
+                     class="clickable-image">
+                <p class="image-caption">Figura 12: Error de despliegue de endpoint en entorno de laboratorio
+                    académico</p>
+            </div>
+
+            <div class="alert alert-info">
+                <h3>Configuración Teórica del Endpoint</h3>
+                <p><strong>En un entorno de producción, el endpoint se configuraría con:</strong></p>
+                <ul>
+                    <li><strong>Tipo de instancia:</strong> ml.m5.large (balanceada para CPU/memoria)</li>
+                    <li><strong>Auto-scaling:</strong> Escalado automático basado en demanda</li>
+                    <li><strong>Tiempo de respuesta:</strong> < 2 segundos para predicciones individuales</li>
+                    <li><strong>Capacidad:</strong> 100+ requests por minuto</li>
+                    <li><strong>Disponibilidad:</strong> 99.9% con múltiples zonas de disponibilidad</li>
+                </ul>
+            </div>
+
+            <div class="highlight-box">
+                <h3>Casos de Uso del Endpoint en Tiempo Real</h3>
+                <ul>
+                    <li><strong>Aplicaciones web:</strong> Plataformas inmobiliarias con valoración instantánea</li>
+                    <li><strong>Apps móviles:</strong> Herramientas de tasación para agentes inmobiliarios</li>
+                    <li><strong>APIs:</strong> Integración con sistemas de gestión inmobiliaria</li>
+                    <li><strong>Dashboards:</strong> Paneles de control con análisis en tiempo real</li>
+                    <li><strong>Herramientas de decisión:</strong> Soporte para inversores y desarrolladores</li>
+                </ul>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Modalidad</th>
+                        <th>Tiempo de Respuesta</th>
+                        <th>Escalabilidad</th>
+                        <th>Costo</th>
+                        <th>Caso de Uso Ideal</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Inferencias Batch</td>
+                        <td>Minutos/Horas</td>
+                        <td>Muy Alta</td>
+                        <td>Bajo</td>
+                        <td>Análisis masivos, reportes</td>
+                    </tr>
+                    <tr>
+                        <td>Endpoint Tiempo Real</td>
+                        <td>< 2 segundos</td>
+                        <td>Alta</td>
+                        <td>Medio-Alto</td>
+                        <td>Apps interactivas, APIs</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="alert alert-success">
+                <strong>Arquitectura para Producción:</strong> En un entorno de producción, se implementaría una
+                arquitectura híbrida combinando endpoints en tiempo real para consultas interactivas y procesamiento
+                batch para análisis masivos, optimizando así tanto la experiencia de usuario como los costos operativos.
+            </div>
+        </section>
+
+        <section class="section" id="seccion-7">
+            <h2>7. Monitorización y Mantenimiento</h2>
+
+            <h3 id="seccion-7-1">7.1. Panel de SageMaker</h3>
+            <p>El panel general de Amazon SageMaker AI proporciona una vista centralizada de toda la actividad de machine learning, permitiendo monitorizar el estado y recursos utilizados en el proyecto.</p>
+
+            <div class="image-container">
+                <img src="images/sagemaker-panel-general.webp" alt="Panel general de Amazon SageMaker AI"
+                     class="clickable-image">
+                <p class="image-caption">Figura 19: Panel general de Amazon SageMaker AI mostrando actividad reciente y recursos</p>
+            </div>
+
+            <div class="alert alert-warning">
+                <h3>Nota sobre la Actividad Reciente</h3>
+                <p>La actividad reciente mostrada en el panel puede no reflejar completamente todo el trabajo realizado en este proyecto. Durante el desarrollo, el laboratorio inicial agotó sus créditos de AWS ($50), por lo que fue necesario migrar a un nuevo entorno de laboratorio. En este proceso se conservaron los datos transformados del dataset (madrid_rent_cleaned.csv) pero fue necesario repetir el entrenamiento del modelo en el nuevo entorno.</p>
+            </div>
+
+            <div class="highlight-box">
+                <h3>Información Visible en el Panel</h3>
+                <p><strong>Actividad Reciente por Categoría:</strong></p>
+                <ul>
+                    <li><strong>Canvas - Puntos de conexión:</strong> 20 creados, 20 finalizados - Gestión de endpoints para inferencias</li>
+                    <li><strong>Procesamiento:</strong> 1 trabajo creado - Procesamiento de datos con Data Wrangler</li>
+                    <li><strong>Entrenamiento:</strong> Sin actividad reciente visible (debido al cambio de laboratorio)</li>
+                    <li><strong>Inferencia:</strong> Sin actividad reciente visible en esta vista</li>
+                </ul>
+
+                <p><strong>Recursos de AWS utilizados:</strong></p>
+                <ul>
+                    <li><strong>/aws/sagemaker/Canvas/AppActivity:</strong> 1 métrica - Actividad de SageMaker Canvas</li>
+                    <li><strong>/aws/sagemaker/ProcessingJobs:</strong> 30 métricas - Jobs de procesamiento de datos</li>
+                    <li><strong>Otros servicios monitorizados:</strong> Billing (13), EFS (8), KMS (2), Logs (18), etc.</li>
+                </ul>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Servicio</th>
+                        <th>Métricas Activas</th>
+                        <th>Propósito en el Proyecto</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>SageMaker Canvas</td>
+                        <td>1</td>
+                        <td>Entrenamiento de modelos AutoML</td>
+                    </tr>
+                    <tr>
+                        <td>Processing Jobs</td>
+                        <td>30</td>
+                        <td>Procesamiento de datos y transformaciones</td>
+                    </tr>
+                    <tr>
+                        <td>S3</td>
+                        <td>2</td>
+                        <td>Almacenamiento de datasets y artefactos</td>
+                    </tr>
+                    <tr>
+                        <td>Billing</td>
+                        <td>13</td>
+                        <td>Control de costos y uso de recursos</td>
+                    </tr>
+                    <tr>
+                        <td>CloudWatch Logs</td>
+                        <td>18</td>
+                        <td>Monitorización y logging de operaciones</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 id="seccion-7-2">7.2. Logs de Amazon CloudWatch</h3>
+            <p>Amazon CloudWatch proporciona logging detallado de todas las operaciones de SageMaker. Aunque el Model Monitor está limitado en el entorno de laboratorio, CloudWatch Logs permite rastrear el progreso del entrenamiento y detectar posibles problemas.</p>
+
+            <div class="image-container">
+                <img src="images/cloudwatch-processing-jobs.webp" alt="Grupos de registros en CloudWatch"
+                     class="clickable-image">
+                <p class="image-caption">Figura 20a: Grupos de registros de SageMaker en CloudWatch</p>
+            </div>
+
+            <div class="image-container">
+                <img src="images/cloudwatch-training-logs.webp" alt="Logs detallados del entrenamiento"
+                     class="clickable-image">
+                <p class="image-caption">Figura 20b: Logs detallados del proceso de entrenamiento del modelo</p>
+            </div>
+
+            <div class="highlight-box">
+                <h3>Análisis de los Logs de Entrenamiento</h3>
+                <p><strong>Información relevante extraída de los logs:</strong></p>
+                <ul>
+                    <li><strong>Proceso de generación del modelo:</strong> Los logs muestran el progreso completo desde la carga de datos hasta la generación de artefactos del modelo</li>
+                    <li><strong>Duración del entrenamiento:</strong> El modelo completó su entrenamiento en aproximadamente 13 segundos (timestamp 18:32:37), indicando eficiencia del proceso AutoML</li>
+                    <li><strong>Gestión de archivos:</strong> Se observa la eliminación sistemática de modelos intermedios y la generación de archivos finales optimizados</li>
+                    <li><strong>Diferentes algoritmos evaluados:</strong> Los logs revelan la evaluación de múltiples algoritmos (LightGBM, RandomForest, CatBoost, XGBoost, etc.) como parte del proceso automático de selección</li>
+                    <li><strong>Optimización de recursos:</strong> El sistema gestiona automáticamente la limpieza de modelos temporales para optimizar el uso de almacenamiento</li>
+                </ul>
+            </div>
+
+            <div class="alert alert-info">
+                <h3>Estructura de Logging en CloudWatch</h3>
+                <p><strong>Grupos de registros identificados:</strong></p>
+                <ul>
+                    <li><strong>/aws/sagemaker/ProcessingJobs:</strong> Logs de trabajos de procesamiento de datos</li>
+                    <li><strong>Canvas logs:</strong> Registros específicos del entrenamiento con Canvas (Canvas174992451064...)</li>
+                    <li><strong>Retención:</strong> Los logs se conservan por defecto, permitiendo análisis histórico</li>
+                    <li><strong>Volumen de datos:</strong> 1.66 MB de logs almacenados para este proyecto</li>
+                </ul>
+            </div>
+
+            <div class="code-block">
+                Ejemplos de logs relevantes del entrenamiento:
+                [06/14/2025 18:32:34] Model Insights completed...
+                [06/14/2025 18:32:35] Generating model files...
+                [06/14/2025 18:32:37] Model Insights completed in 13.0 seconds
+                [06/14/2025 18:32:37] Deleting model LightGBM_BAG_L1...
+                [06/14/2025 18:32:37] Deleting model RandomForestMSE_BAG_L1...
+                [06/14/2025 18:32:37] Deleting model CatBoost_BAG_L1...
+            </div>
+
+            <h3 id="seccion-7-3">7.3. Monitorización de Recursos y Métricas</h3>
+            <p>La monitorización en CloudWatch también proporciona visibilidad sobre el uso de recursos y métricas de rendimiento del sistema durante el entrenamiento y operación.</p>
+
+            <div class="image-container">
+                <img src="images/cloudwatch-metrics-dashboard.webp" alt="Dashboard de métricas en CloudWatch"
+                     class="clickable-image">
+                <p class="image-caption">Figura 21: Dashboard de métricas de CloudWatch mostrando espacios de nombres monitorizados</p>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Categoría de Monitorización</th>
+                        <th>Métricas Disponibles</th>
+                        <th>Utilidad</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Billing</td>
+                        <td>13 métricas</td>
+                        <td>Control de costos y presupuesto del proyecto</td>
+                    </tr>
+                    <tr>
+                        <td>SageMaker Processing</td>
+                        <td>30 métricas</td>
+                        <td>Rendimiento de jobs de procesamiento de datos</td>
+                    </tr>
+                    <tr>
+                        <td>CloudWatch Logs</td>
+                        <td>18 métricas</td>
+                        <td>Volumen y retención de logs del sistema</td>
+                    </tr>
+                    <tr>
+                        <td>S3</td>
+                        <td>2 métricas</td>
+                        <td>Uso de almacenamiento de datasets</td>
+                    </tr>
+                    <tr>
+                        <td>Usage</td>
+                        <td>153 métricas</td>
+                        <td>Uso general de servicios AWS</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="alert alert-warning">
+                <strong>Limitaciones del Entorno de Laboratorio:</strong> El Model Monitor avanzado de SageMaker está restringido en AWS Academy. En un entorno de producción, estaría disponible monitorización avanzada incluyendo data drift detection, model quality monitoring, y bias detection automática.
+            </div>
+
+            <div class="alert alert-success">
+                <h3>Beneficios de la Monitorización Implementada</h3>
+                <ul>
+                    <li><strong>Visibilidad completa:</strong> Tracking detallado de todo el pipeline ML</li>
+                    <li><strong>Detección temprana:</strong> Identificación de problemas durante el entrenamiento</li>
+                    <li><strong>Control de costos:</strong> Monitorización de uso de recursos y billing</li>
+                    <li><strong>Análisis histórico:</strong> Logs preservados para análisis posterior</li>
+                    <li><strong>Escalabilidad:</strong> Infraestructura preparada para monitorización en producción</li>
+                </ul>
+            </div>
+        </section>
+
+        <div class="conclusion" id="seccion-8">
+            <h2>8. Conclusiones y Lecciones Aprendidas</h2>
+
+            <h3>8.1. Logros Principales</h3>
+            <p>El proyecto ha logrado implementar exitosamente un pipeline completo de Machine Learning end-to-end
+                utilizando AWS SageMaker, cumpliendo y superando todos los objetivos técnicos establecidos:</p>
+            <ul>
+                <li><strong>Precisión del modelo:</strong> MAE de 298.922€, superando significativamente el objetivo de 400€</li>
+                <li><strong>Capacidad explicativa:</strong> R² de 85.352%, superando ampliamente el objetivo de 75%</li>
+                <li><strong>Robustez:</strong> RMSE de 554.022€, cumpliendo el objetivo de ≤600€</li>
+                <li><strong>Tiempo de respuesta:</strong> 1.046 segundos, superando el objetivo de <2s</li>
+                <li><strong>Despliegue exitoso:</strong> Inferencias batch operativas y modelo registrado correctamente</li>
+            </ul>
+
+            <h3>8.2. Limitaciones y Oportunidades de Mejora</h3>
+            <p>Aunque los resultados obtenidos son excelentes, existen varias áreas donde el modelo podría haber sido optimizado aún más:</p>
+
+            <div class="alert alert-warning">
+                <h3>Imputación Avanzada de Variables Faltantes</h3>
+                <p>En trabajos anteriores con este mismo dataset, implementé un modelo de regresión específico para imputar los valores faltantes de la columna <strong>floor_area</strong>, aprovechando su alta correlación con el precio objetivo. Esta técnica habría resultado en imputaciones más precisas que el método simplificado utilizado (factor 0.75 sobre superficie construida). Sin embargo, <strong>las limitaciones presupuestarias del entorno de laboratorio ($50) hicieron inviable esta aproximación</strong>, ya que requeriría entrenar modelos adicionales y realizar validaciones cruzadas costosas en términos computacionales.</p>
+            </div>
+
+            <div class="alert alert-info">
+                <h3>Integración de Datos Textuales mediante NLP</h3>
+                <p>Una mejora significativa habría sido la incorporación de las <strong>descripciones textuales de los anuncios</strong> mediante técnicas de procesamiento de lenguaje natural. En proyectos anteriores he trabajado con datasets que incluían estas descripciones, las cuales contienen información valiosa sobre características de la propiedad, estado de conservación, y elementos diferenciadores que impactan el precio.</p>
+                <p><strong>Limitaciones técnicas y económicas:</strong> El procesamiento de texto a gran escala en AWS requiere el uso de servicios como Amazon Comprehend, SageMaker Ground Truth para labeling, y recursos computacionales intensivos (instancias GPU) para entrenar modelos de embeddings o transformers. Los costos asociados al procesamiento de 9,000+ descripciones, incluyendo tokenización, vectorización, y entrenamiento de modelos NLP, habrían excedido significativamente el presupuesto disponible, especialmente considerando las tarifas por token de servicios como Amazon Bedrock o el costo de instancias ml.p3.2xlarge necesarias para modelos de lenguaje.</p>
+            </div>
+
+            <h3>8.3. Ventajas de AWS SageMaker y el Ecosistema AWS</h3>
+            <p>La experiencia con AWS SageMaker ha revelado capacidades excepcionales que democratizan el machine learning:</p>
+
+            <div class="highlight-box">
+                <h3>Capacidades Destacadas de SageMaker</h3>
+                <ul>
+                    <li><strong>AutoML sin código:</strong> SageMaker Autopilot evaluó automáticamente decenas de algoritmos y configuraciones sin requerir una sola línea de código, identificando el modelo óptimo en cuestión de horas</li>
+                    <li><strong>EDA automático comprehensivo:</strong> Data Wrangler proporcionó análisis exploratorios increíblemente detallados, incluyendo detección de target leakage, análisis de correlaciones, y reportes de calidad de datos que habrían requerido días de trabajo manual</li>
+                    <li><strong>Gestión completa del ciclo de vida:</strong> Desde el análisis inicial hasta el despliegue y monitorización, todo integrado en una plataforma unificada</li>
+                    <li><strong>Escalabilidad automática:</strong> Capacidad de manejar datasets de cualquier tamaño sin preocupaciones por infraestructura</li>
+                    <li><strong>Integración nativa:</strong> Conectividad perfecta entre S3, CloudWatch, Model Registry y otros servicios AWS</li>
+                </ul>
+            </div>
+
+            <div class="alert alert-danger">
+                <h3>Principal Limitación: Costos Elevados</h3>
+                <p><strong>La única desventaja significativa de AWS SageMaker es su alto costo.</strong> Para proyectos académicos o pequeñas empresas, los precios pueden ser prohibitivos:</p>
+                <ul>
+                    <li>Instancias de entrenamiento desde $0.50/hora para las más básicas</li>
+                    <li>Endpoints en tiempo real con costos fijos independientemente del uso</li>
+                    <li>Servicios adicionales como Clarify, Model Monitor, y Ground Truth con tarifas premium</li>
+                    <li>Transferencia de datos y almacenamiento que se acumula rápidamente en proyectos grandes</li>
+                </ul>
+                <p>Esta limitación económica impactó directamente el alcance del proyecto, impidiendo la implementación de funcionalidades avanzadas como análisis de sesgo con Clarify o endpoints en tiempo real.</p>
+            </div>
+
+            <h3>8.4. Lecciones Aprendidas</h3>
+            <p>El proyecto ha proporcionado aprendizajes valiosos sobre MLOps en AWS y gestión de proyectos de machine learning:</p>
+            <ul>
+                <li><strong>Gestión estratégica de costos:</strong> La planificación presupuestaria es crítica en cloud computing; cada recurso debe ser optimizado</li>
+                <li><strong>Potencia del AutoML:</strong> SageMaker Autopilot demuestra que la automatización puede superar resultados de aproximaciones manuales tradicionales</li>
+                <li><strong>Valor del EDA automatizado:</strong> Data Wrangler reveló insights que habrían sido difíciles de detectar manualmente</li>
+                <li><strong>Importancia de la arquitectura cloud-native:</strong> La integración nativa entre servicios AWS acelera significativamente el desarrollo</li>
+                <li><strong>Monitorización desde el inicio:</strong> CloudWatch y los logs detallados son fundamentales para debugging y optimización</li>
+            </ul>
+
+            <h3>8.5. Impacto y Valor Generado</h3>
+            <p>El sistema desarrollado aporta valor tangible al mercado inmobiliario madrileño:</p>
+            <ul>
+                <li><strong>Transparencia en valoraciones:</strong> Predicciones objetivas basadas en características medibles</li>
+                <li><strong>Democratización del acceso:</strong> Herramienta disponible para pequeños propietarios, no solo grandes inmobiliarias</li>
+                <li><strong>Eficiencia operativa:</strong> Automatización del proceso de tasación con alta precisión</li>
+                <li><strong>Escalabilidad comprobada:</strong> Arquitectura preparada para procesar miles de propiedades diariamente</li>
+            </ul>
+
+            <h3>8.6. Próximos Pasos y Evolución del Sistema</h3>
+            <p>Para el desarrollo futuro del sistema se identifican las siguientes mejoras prioritarias:</p>
+            <ul>
+                <li><strong>Implementación de NLP:</strong> Incorporar análisis de descripciones textuales cuando el presupuesto lo permita</li>
+                <li><strong>Reentrenamiento automático:</strong> Pipeline de CI/CD para actualizaciones periódicas del modelo</li>
+                <li><strong>Análisis de sesgo completo:</strong> Implementación de SageMaker Clarify para garantizar equidad</li>
+                <li><strong>Interfaz de usuario:</strong> Desarrollo de aplicación web para facilitar el acceso a usuarios finales</li>
+                <li><strong>Integración con APIs inmobiliarias:</strong> Conexión directa con portales como Idealista o Fotocasa</li>
+                <li><strong>Modelo de pricing dinámico:</strong> Ajustes automáticos basados en tendencias de mercado</li>
+            </ul>
+
+            <p><strong>Reflexión final:</strong> Este proyecto demuestra que AWS SageMaker representa una revolución en la democratización del machine learning, permitiendo que equipos sin expertise profundo en ML puedan crear sistemas de producción de alta calidad. Aunque los costos pueden ser un obstáculo, la productividad y calidad de resultados justifican la inversión para proyectos comerciales. La experiencia adquirida establece una base sólida para futuros desarrollos más ambiciosos en el ecosistema AWS, confirmando que el futuro del ML empresarial está en plataformas cloud automatizadas como SageMaker.</p>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Proyecto Fase 4 • Machine Learning End-to-End con AWS SageMaker</p>
+        <p>UNIR - Universidad Internacional de La Rioja • 2025</p>
+        <p>Autor • Asier Ortiz</p>
+    </div>
+</div>
+
+<!-- Modal para ampliar imágenes -->
+<div id="imageModal" class="modal">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <img class="modal-content" id="modalImage">
+    <div class="modal-caption" id="modalCaption"></div>
+</div>
+
+<script>
+    // Función para mostrar modal con imagen ampliada
+    function showModal(img) {
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImage');
+        const caption = document.getElementById('modalCaption');
+
+        modal.style.display = 'block';
+        modalImg.src = img.src;
+        caption.innerHTML = img.alt;
+    }
+
+    // Función para cerrar modal
+    function closeModal() {
+        document.getElementById('imageModal').style.display = 'none';
+    }
+
+    // Event listeners para imágenes clicables
+    document.addEventListener('DOMContentLoaded', function () {
+        const clickableImages = document.querySelectorAll('.clickable-image');
+
+        clickableImages.forEach(img => {
+            img.addEventListener('click', function () {
+                showModal(this);
+            });
+        });
+
+        // Cerrar modal al hacer click fuera de la imagen
+        document.getElementById('imageModal').addEventListener('click', function (e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Cerrar modal con tecla Escape
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+    });
+
+    // Smooth scrolling para enlaces del índice
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
